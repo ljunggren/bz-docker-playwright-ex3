@@ -11,7 +11,7 @@ set -ex
 USERNAME=styrman
 
 # image name
-IMAGE=boozang-playwright
+IMAGE=boozang-playwright-ex3
 
 # ensure we're up to date
 git pull

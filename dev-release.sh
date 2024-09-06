@@ -11,7 +11,7 @@ set -ex
 USERNAME=styrman
 
 # image name
-IMAGE=boozang-playwright-dev
+IMAGE=boozang-playwright-ex3-dev
 
 # run build
 ./build.sh

@@ -18,9 +18,9 @@ var formatter={
     s.setAttribute("href","//ai.boozang.com/formatter/formatter.css")
     document.body.append(s)
   },
-  updateFormatLogSetting:function(setting){
+  updateFormatLogSetting:function(setting,_fun){
     try{
-      localStorage.setItem("bz-log-format",JSON.stringify(setting))
+      chrome.storage.sync.set({"bz-log-format":JSON.stringify(setting)},_fun)
     }catch(e){}
   },
   exeFormag:function(setting,auto){
@@ -33,8 +33,9 @@ var formatter={
     if(setting.gotoOrg){
       setting.ignore= 1
       delete setting.gotoOrg
-      formatter.updateFormatLogSetting(setting)
-      location.reload()
+      return formatter.updateFormatLogSetting(setting,()=>{
+        location.reload()
+      })
     }else if(setting.ignore){
       delete setting.ignore
       formatter.updateFormatLogSetting(setting)
@@ -459,9 +460,10 @@ var formatter={
       }
 
       formatter.data.setting.gotoOrg=1
-      formatter.updateFormatLogSetting(formatter.data.setting)
-      formatter.data.setting.gotoOrg=0
-      formatter.openWindow(n)
+      formatter.updateFormatLogSetting(formatter.data.setting,()=>{
+        formatter.data.setting.gotoOrg=0
+        formatter.openWindow(n)
+      })
     }
     function openTest(o){
       let v=o.attr("bz"),k=o.attr("worker")
@@ -596,8 +598,6 @@ var formatter={
         o="worker-1"
       }
       return `[${o}]`
-    }else{
-      debugger
     }
   },
   getGroupElement:function(o){
@@ -661,8 +661,8 @@ var formatter={
   getLogList:function(masterUrl){
     let v;
     try{
-      eval("v="+formatter.data.setting.identifyWorker)
-      v= v(masterUrl)
+      v=eval(`(${formatter.data.setting.identifyWorker})(masterUrl)`,{masterUrl:masterUrl})
+
       if(!v||v.constructor!=Array||v.includes(masterUrl)){
         v=[]
       }
@@ -876,7 +876,7 @@ var formatter={
     if(!v){
       return bkFun&&bkFun()
     }
-    if(formatter.data.setting.lineClear){
+    if(formatter.data.setting.lineClearChk){
       v=v.split("\n").map(x=>formatter.lineClear(x.trim())).join("\n")
     }
     v=(fd.curEnd||"")+v
@@ -1641,22 +1641,22 @@ var formatter={
     document.body.append(o)
     return 1
   },
-  getSetting:function(){
-    let v;
-    try{
-      v=localStorage.getItem("bz-log-format");
-      if(v){
-        v=JSON.parse(v)
+  getSetting:function(_fun){
+    chrome.storage.sync.get("bz-log-format",function(d){
+      d=d["bz-log-format"]
+      if(d){
+        d=JSON.parse(d)
+
+        if(!d.scenarioTime){
+          d.scenarioTime=180
+          d.testTime=60
+        }
+        d.account=d.account||{}
+        if(_fun){
+          _fun(d)
+        }
       }
-    }catch(e){}
-    v=v||{}
-    if(!v.scenarioTime){
-      v.scenarioTime=180
-      v.testTime=60
-    }
-    
-    v.account=v.account||{}
-    return v
+    })
   },
   attachQuickLogClick:function(){
     setTimeout(()=>{
@@ -1693,50 +1693,55 @@ var formatter={
     }
   },
   autoLoading:function(){
-    let v=formatter.getSetting();
-    if(v.autoFormat){
-      if(formatter.isMasterPage(v)){
-        return formatter.exeFormag(v,Date.now())
-      }else if(location.href.match(/\/jenkins[.]/)){
-        formatter.insertCss()
-        if(location.href.match(/jenkins[.].+\/job[\/]/)){
-          if(!location.href.match(/\/[0-9]+[\/]/)){
-            formatter.attachQuickLogClick()
+    chrome.storage.sync.get("bz-log-format",function(v){
+      v=v["bz-log-format"]
+      if(v){
+        v=JSON.parse(v)
+
+        if(v.autoFormat){
+          if(formatter.isMasterPage(v)){
+            return formatter.exeFormag(v,Date.now())
+          }else if(location.href.match(/\/jenkins[.]/)){
+            formatter.insertCss()
+            if(location.href.match(/jenkins[.].+\/job[\/]/)){
+              if(!location.href.match(/\/[0-9]+[\/]/)){
+                formatter.attachQuickLogClick()
+              }
+            }
           }
         }
+        formatter.chkXray(v);
+        setTimeout(()=>{
+          formatter.exeCITests()
+        },1000)
       }
-    }
-    formatter.chkXray(v);
-    setTimeout(()=>{
-      formatter.exeCITests()
-    },1000)
+    })
   },
   chkXray:function(v){
-    v=v||formatter.getSetting();
     if(v&&v.account&&v.account.xray&&location.href.includes(v.account.xray)){
       let vv=location.href.match(/(\/browse[\/]|\&selectedIssue=|\&issueKey=)([^&\/]+)/)
       if(vv){
         vv=vv[2]
         vv=vv.replace("/","")
         if((v.account.tags||{})[vv]){
-          formatter.formatXray(v.account.tags[vv])
+          formatter.formatXray(v.account,v.account.tags[vv])
         }
       }
     }
   },
-  formatXray:function(k,ok){
+  formatXray:function(d,k,ok){
     setTimeout(()=>{
       if($("#bz-play")[0]){
         return
       }
-      let d=formatter.getSetting().account;
+
       let host=d.server
       if(host=="oth"){
         host=d.othServer
       }
       if(window.$){
         if(!ok){
-          return formatter.formatXray(k,1)
+          return formatter.formatXray(d,k,1)
         }
         let o=$("[data-testid=xray-test-type-select]")[0]
         if(!o){
@@ -1762,7 +1767,7 @@ var formatter={
           $(this).blur()
         })
       }else{
-        formatter.formatXray(k,ok)
+        formatter.formatXray(d,k,ok)
       }
     },1000)
   },
@@ -1772,9 +1777,7 @@ var formatter={
   isMasterPage:function(v){
     if(v.identifyMaster){
       try{
-        let f;
-        eval("f="+v.identifyMaster)
-        return f()
+        return eval(`(${v.identifyMaster})()`)
       }catch(ex){
         alert("Identify page script issue: "+ex.message)
       }
@@ -1784,10 +1787,11 @@ var formatter={
     let f=formatter.data.setting.lineClear
     if(f){
       if(f.constructor==String){
-        eval("f="+f)
+        f=eval(f)
         formatter.data.setting.lineClear=f
+        // return eval(`(${f})(v)`,{v:v})
       }
-      return f(v)
+      return _bzEval._exeFun(f,[v])
     }
     return v
   },
@@ -2449,7 +2453,7 @@ var formatter={
           }
         }).filter(x=>x).join("|")
         if(v){
-          eval("v=/"+v+"/i")
+          v=eval("/"+v+"/i")
         }
       }else if(v.constructor==String){
         os=os.filter(x=>{
@@ -3470,9 +3474,6 @@ var analyzer={
 
 setTimeout(()=>{
   formatter.autoLoading()
-  window.onresize=function(){
-    formatter.chkXray()
-  }
 },100)
 
 let lastUrl = location.href; 
