@@ -2333,7 +2333,7 @@ function extendJQuery(){
       
       let _inRegex=_Util._isRegexData(v2)
       if(_inRegex){
-        v2=_Util._getRegexByBZName(v2.substring(1,v2.length-1),1)
+        v2=v2.substring(1,v2.length-1)
         v2=new RegExp(v2,"im")
       }else{
         v2=v2.trim().toLowerCase();
@@ -3072,7 +3072,7 @@ function extendJQuery(){
       }
       let _inRegex=_Util._isRegexData(v2)
       if(_inRegex){
-        v2=_Util._getRegexByBZName(v2.substring(1,v2.length-1),1)
+        v2=v2.substring(1,v2.length-1)
         v2=new RegExp(v2,"im")
       }else{
         v2=v2.trim().toLowerCase();
@@ -3115,7 +3115,7 @@ function extendJQuery(){
     var os=a.childNodes;
     var v2=m[3],_inRegex=_Util._isRegexData(v2)
     if(_inRegex){
-      v2=_Util._getRegexByBZName(v2.substring(1,v2.length-1),1)
+      v2=v2.substring(1,v2.length-1)
       v2=new RegExp(v2,"i")
     }else{
       v2=v2.trim().toLowerCase();

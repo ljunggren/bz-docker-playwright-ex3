@@ -7640,8 +7640,8 @@ window.BZ={
     "_aiAuthHandler._data":"aiAuthHandler",
     "BZ._data._curProject":"curProject",
     "_IDE._data._curVersion":"curVersion",
-    "_IDE._data._curModule":"curModule",
-    "_IDE._data._curTest":"curTest",
+    "_IDE._data._curModule._data":"curModule",
+    "_IDE._data._curTest._data":"curTest",
     "_IDE._data._curAction":"curAction",
     "_aiDataHandler":"aiDataHandler",
     "_cooperatorHandler._data":"cooperatorHandler",
@@ -7925,12 +7925,8 @@ window.BZ={
       "BZ._userHabit.toolbarPos":BZ._userHabit.toolbarPos,
       "BZ._data._status":BZ._data._status,
       "_aiAuthHandler._data":_aiAuthHandler._data,
-      "_IDE._data._curModule":m&&{
-        data:_Util._cloneSelectData(m._data,0,"code|name|parentModule|bt")
-      },
-      "_IDE._data._curTest":t&&{
-        data:_Util._cloneSelectData(t._data,0,"code|name|actions|type")
-      },
+      "_IDE._data._curModule._data":m&&_Util._cloneSelectData(m._data,0,"code|name|parentModule|bt"),
+      "_IDE._data._curTest._data":t&&_Util._cloneSelectData(t._data,0,"code|name|actions|type"),
       "_IDE._data._curAction":_IDE._data._curAction,
       "BZ._data._checkout":t&&BZ._isCheckout()&&t._data.type=="unit",
     }
