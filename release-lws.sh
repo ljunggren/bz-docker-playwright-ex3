@@ -16,7 +16,7 @@ IMAGE=boozang-playwright-ex3
 # ensure we're up to date
 git pull
 # bump version
-# winpty docker run --rm -v "$PWD":/app treeder/bump patch
+winpty docker run --rm -v "/$PWD":/app treeder/bump patch
 version=`cat VERSION`
 echo "version: $version"
 
