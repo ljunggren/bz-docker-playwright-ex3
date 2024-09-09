@@ -35,8 +35,8 @@ git push
 git push --tags
 
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
-docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major
-docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major.$minor
+# docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major
+# docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major.$minor
 
 # push it
 docker push $USERNAME/$IMAGE:latest
