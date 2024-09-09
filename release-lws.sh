@@ -16,7 +16,7 @@ IMAGE=boozang-playwright-ex3
 # ensure we're up to date
 git pull
 # bump version
-# docker run --rm -v "$PWD":/app treeder/bump patch
+winpty docker run --rm -v "$PWD":/app treeder/bump patch
 version=`cat VERSION`
 echo "version: $version"
 
@@ -35,12 +35,12 @@ git push
 git push --tags
 
 winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
-# docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major
-# docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major.$minor
+winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major
+winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major.$minor
 
 # push it
 winpty docker push $USERNAME/$IMAGE:latest
-# docker push $USERNAME/$IMAGE:$version
-# docker push $USERNAME/$IMAGE:$major
-# docker push $USERNAME/$IMAGE:$major.$minor
+winpty docker push $USERNAME/$IMAGE:$version
+winpty docker push $USERNAME/$IMAGE:$major
+winpty docker push $USERNAME/$IMAGE:$major.$minor
 
