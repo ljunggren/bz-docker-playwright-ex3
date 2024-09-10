@@ -65,4 +65,4 @@ ENV PORT=3001
 ENV DISPLAY :99
 
 # Start script on Xvfb
-ENTRYPOINT ["wrap.sh"]
+ENTRYPOINT ["./wrap.sh"]
