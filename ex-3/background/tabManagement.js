@@ -151,13 +151,22 @@ const _tabManagement={
 
 
     function _loadTab(t){
-      let a=_tabManagement._map[t.tabId||t.id]||new BZTab(t),f=t.frameId,pf=t.parentFrameId;
+      let a=_tabManagement._map[t.tabId||t.id]||new BZTab(t),
+          f=t.frameId,
+          pf=t.parentFrameId;
+
       if(!a.url){
         return
       }
       _tabManagement._map[a.id]=a
       a.url=f?a.url:t.url
       if(a.ide){
+        if(t.documentLifecycle=="prerender"){
+          return
+        }else if(!t.url.includes("token=")&&t.transitionType!="link"&&t.transitionType!="reload"){
+          delete _tabManagement._map[a.id]
+          return bgComm.exeScriptInExtension(`debugger;bzComm.popIDE()`,a.id)
+        }
         _closeApp(a)
         _tabManagement._assignId({ide:a.id,appIFrames:a.appIFrames},a.id)
         delete a.myApp
@@ -174,12 +183,17 @@ const _tabManagement={
           if(!f){
             fs[0]={bzCommReady:1,idx:0}
           }else{
+            debugger
             let p=i.getIframeById(pf)
             if(p){
-              p[f]={url:t.url,bzCommReady:t.url=="about:blank"?1:0}
-              Object.values(p).forEach(v=>{
-                delete v.idx
-              })
+              p[f]={
+                url:t.url,
+                idx:Object.keys(p).length,
+                bzCommReady:1//t.url=="about:blank"?1:0
+              }
+              // Object.values(p).forEach(v=>{
+              //   delete v.idx
+              // })
             }
           }
           a.appIFrames=fs

@@ -16072,33 +16072,27 @@ window.bzComm={
     }else{
       bzComm.postToIDE(d,fun)
     }
+  },
+  popIDE:function(){
+    window.name=""
+    let p=localStorage.getItem("bz-ide")
+    if(p){
+      p=JSON.parse(p)
+    }else{
+      p={w:screen.availWidth/2,h:screen.availHeight}
+    }
+    let v=location.href
+    window.open(v,"bz-master","width="+p.w+",height="+p.h)
+    location.href=location.origin
   }
 }
 if(window.name=="bz-client"){
   bzComm.init()
 }else if(window.name=="bz-master"){
-  if(!opener){
-    if(!window.BZ){
-      location.reload()
-    }else if(!window.extensionContent&&!_Util._isPopWin()&&location.href.includes("/extension")){
-      window.name=""
-      let p=localStorage.getItem("bz-ide")
-      if(p){
-        p=JSON.parse(p)
-      }else{
-        p={w:screen.availWidth/2,h:screen.availHeight}
-      }
-      let v=location.href
-      window.open(v,"bz-master","width="+p.w+",height="+p.h)
-      location.href=location.origin
-      window.close()
-    }else{
-      bzComm.init()
-    }
-  }else{
-    if(window.extensionContent){
-      bzComm.init()
-    }
+  if(!window.BZ){
+    location.reload()
+  }else if(window.extensionContent){
+    bzComm.init()
   }
 }else{
   bzComm._chkInit()
@@ -18027,9 +18021,8 @@ var $util={
           console.log(e.stack);
         }
         if(_withEnter){
-                    return $util.triggerKeyEvents(o,13,0,false,false,false,function(){
-                        _doFinal()
-          });
+          $util.triggerEnterEvent(o);
+          _doFinal()
         }else if(_withSubmit){
           let _form=_Util._getParentElementByCss("form",o)
           if(_form){
@@ -18121,6 +18114,50 @@ var $util={
         BZ._reportAppInfo("Set input 88: "+ex.message+"\n"+ex.stack)
       }
     }
+  },
+  triggerEnterEvent:function(o){
+    // 选择要触发事件的元素
+    let d={
+      key: "Enter",
+      keyCode: 13,
+      code: "Enter",
+      which: 13,
+      bubbles: true,
+      cancelable: true
+    }
+    // 创建并触发 keydown 事件
+    let e = new KeyboardEvent("keydown", d);
+    o.dispatchEvent(e);
+
+    // 创建并触发 keypress 事件
+    e = new KeyboardEvent("keypress", d);
+    o.dispatchEvent(e);
+
+    // 创建并触发 keyup 事件
+    e = new KeyboardEvent("keyup", d);
+    o.dispatchEvent(e);
+  },
+  triggerTabEvent:function(o){
+    // 选择要触发事件的元素
+    let d={
+      key: 'Tab',
+      keyCode: 9,
+      code: 'Tab',
+      which: 9,
+      bubbles: true,
+      cancelable: true
+    };
+    // 创建并触发 keydown 事件
+    let e = new KeyboardEvent("keydown", d);
+    o.dispatchEvent(e);
+
+    // 创建并触发 keypress 事件
+    e = new KeyboardEvent("keypress", d);
+    o.dispatchEvent(e);
+
+    // 创建并触发 keyup 事件
+    e = new KeyboardEvent("keyup", d);
+    o.dispatchEvent(e);
   },
   //triggerBlurEvent
   triggerBlurEvent:function(o,_fun){
