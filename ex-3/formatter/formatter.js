@@ -1702,7 +1702,7 @@ var formatter={
           if(parent==window){
             _load()
           }else{
-            bzComm._chkInit(0,0,_load)
+            bzComm.chkInit(0,0,_load)
           }
         }
         formatter.chkXray(v);
