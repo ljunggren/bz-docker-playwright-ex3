@@ -652,7 +652,6 @@ const Service = {
     const response = await page.goto(url);
 
     if(data){
-      console.log("Data: ", data);
       await page.evaluate((d)=>{
         setTimeout(()=>{
           localStorage.setItem("bz-reboot",1)
