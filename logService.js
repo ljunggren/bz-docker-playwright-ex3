@@ -656,9 +656,7 @@ const Service = {
       await page.evaluate((d)=>{
         setTimeout(()=>{
           localStorage.setItem("bz-reboot",1)
-          console.log("lws:"+d)
           localStorage.setItem("coop-tasks",d)
-          localStorage.setItem("lws-tasks",d)
         },1000)
       },[data]);
     }
