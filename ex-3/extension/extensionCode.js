@@ -39472,17 +39472,15 @@ var _transferMonitor={
         console.log("BZ-LOG: failed on waiting for UI complete time")
         _fun(Date.now())
       },60000)
-      setTimeout(function(){
-        bzComm.postToAppExtension({
-          fun:"_getUICompleteTime",
-          scope:"_transferMonitor",
-          insertCallFun:1,
-          return:function(r){
-            clearTimeout(_transferMonitor._lastTimer)
-            _fun(r)
-          }
-        })
-      },1000)
+      bzComm.postToAppExtension({
+        fun:"_getUICompleteTime",
+        scope:"_transferMonitor",
+        insertCallFun:1,
+        return:function(r){
+          clearTimeout(_transferMonitor._lastTimer)
+          _fun(r)
+        }
+      })
     }else{
       _transferMonitor._lastUIUpdate=_transferMonitor._lastUIUpdate||Date.now()
       var t=_transferMonitor._lastUIUpdate
