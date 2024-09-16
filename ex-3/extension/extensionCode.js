@@ -1256,6 +1256,7 @@ var _bzMessage={
     _showScreenshot:"Show Screenshot",
     _hideScreenshot:"Hide Screenshot",
     _takeScreenshot:"Take a Screenshot",
+    _scriptRequest:"Script Request",
     _break:"Break",
     _continue:"Continue",
     _wait:"Wait",
