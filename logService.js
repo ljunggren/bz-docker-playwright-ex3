@@ -607,7 +607,7 @@ const Service = {
     Service.consoleMsg("Reload IDE ...")
     
     await Service.browser.close();
-    await Service.startIDE(Service.startUrl.replace("/run","/"),msg);
+    await Service.startIDE(Service.startUrl.replace("/m[0-9]+/t[0-9]+/run","/"),msg);
 
     Service.init() 
   },  
