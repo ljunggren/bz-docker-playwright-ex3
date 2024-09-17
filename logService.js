@@ -630,7 +630,7 @@ const Service = {
       headless: false,
       args: launchargs,
       launchType: "PERSISTENT",
-      devtools: true
+      // devtools: true
     });
 
     let page = await browser.newPage();
