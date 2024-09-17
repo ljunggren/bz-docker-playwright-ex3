@@ -605,7 +605,7 @@ const Service = {
   },
   async reloadIDE(msg){
     await Service.browser.close();
-    let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/run/,"/")
+    let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/.+$/,"/")
     console.log("Reload IDE: ", url);
     await Service.startIDE(url,msg);
 
