@@ -604,10 +604,10 @@ const Service = {
     })
   },
   async reloadIDE(msg){
-    Service.consoleMsg("Reload IDE ...")
-    
     await Service.browser.close();
-    await Service.startIDE(Service.startUrl.replace("/m[0-9]+/t[0-9]+/run","/"),msg);
+    let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/run/,"/")
+    console.log("Reload IDE: ", url);
+    await Service.startIDE(url,msg);
 
     Service.init() 
   },  
