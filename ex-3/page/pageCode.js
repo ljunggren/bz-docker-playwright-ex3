@@ -8457,7 +8457,7 @@ window.bzComm={
   },
   _handleResult:function(v){
     if(v.return){
-      let cp=bzComm.getCurPageType()1
+      let cp=bzComm.getCurPageType()
       let fun=bzComm._callBackMap[v.return].return;
       delete bzComm._callBackMap[v.return];
       if(v.result){
