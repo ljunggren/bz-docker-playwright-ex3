@@ -619,7 +619,7 @@ const Service = {
       '--ignore-certificate-errors',
       '--no-sandbox',
       `--window-size=${Service.width},${Service.height}`,
-      '--defaultViewport: null',
+      '--defaultViewport: null'
     ];
 
 
@@ -629,7 +629,8 @@ const Service = {
       },
       headless: false,
       args: launchargs,
-      launchType: "PERSISTENT"
+      launchType: "PERSISTENT",
+      devtools: true
     });
 
     let page = await browser.newPage();
@@ -653,9 +654,11 @@ const Service = {
 
     if(data){
       await page.evaluate((d)=>{
-        setTimeout(()=>{
-          localStorage.setItem("bz-reboot",1)
-          localStorage.setItem("coop-tasks",d)
+        window["bz-reboot"]=1
+        window["coop-tasks"]=d
+      setTimeout(()=>{
+          // localStorage.setItem("bz-reboot",1)
+          // localStorage.setItem("coop-tasks",d)
         },1000)
       },[data]);
     }
