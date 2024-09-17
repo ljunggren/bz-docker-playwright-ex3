@@ -420,7 +420,7 @@ const Service = {
     Service.addTask({
       key:"timeout in ms:",
       fun(msg){
-        let v= (parseInt(msg.split(this.key)[1].trim())||0) + Service.stdTimeout;
+        let v= parseInt(msg.match(/[0-9]+/)||0) + Service.stdTimeout;
         return v;
       },
       msg:"Action timeout"
