@@ -167,12 +167,12 @@ const Service = {
     Service.addTask({
       key:"I-AM-OK:",
       fun:function(msg){
-        msg=msg.substring(8).trim()
-        Service.tmpSetting=msg
+        // msg=msg.substring(8).trim()
+        // Service.tmpSetting=msg
         clearTimeout(Service.wakeupTimer)
         Service.tryWakeup++
         Service.cancelChkCoop()
-        Service.reloadIDE(msg)
+        // Service.reloadIDE(msg)
       },
       timeout:Service.stdTimeout
     })
