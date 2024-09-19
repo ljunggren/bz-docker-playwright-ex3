@@ -40263,13 +40263,14 @@ var _bzDomPicker={
         }else if(d.constructor==Array){
           d=[...d]
         }
-        let e=(d.path||d.element||d)
+        let e=_JSHandler._prepareData(d.path||d.element||d)
+
         let f=bzComm._getIframeIdByPath(e[0])
         // e[0]="BZ.TW.document"
         bzComm.postToAppExtension({
           fun:"_flashTmpCover",
           scope:"_bzDomPicker",
-          ps:[d],
+          ps:[e],
           toIFrameId:f
         })
       },100)
