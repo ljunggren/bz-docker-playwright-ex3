@@ -29385,7 +29385,7 @@ var _domActionTask={
       bzComm.postToIDE({
         fun:"log",
         scope:"console",
-        ps:[v," (APP)"]
+        ps:["BZ-LOG: "+v+" (APP)"]
       })
     }
   },
@@ -29827,6 +29827,7 @@ var _domActionTask={
           
           delete BZ._lastMouseAction
           if(d.type==1&&d.event&&d.event.type=="change"&&_Util._isStdInputElement(d.e)&&["INPUT","TEXTAREA"].includes(d.e.tagName)){
+            _domActionTask._doLog("Going to redo set value")
             $util.triggerChangeEvent(d.e,"",0,0,0,0,()=>{
               setTimeout(()=>{
                 delete d.e
@@ -29838,6 +29839,7 @@ var _domActionTask={
             })
           }else{
             delete d.e
+            _domActionTask._doLog("Going to redo click element")
             _domActionTask._trigger(d,function(){
               _domActionTask._doLog("redo last action: "+d.description)
               _call()
