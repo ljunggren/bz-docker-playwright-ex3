@@ -7863,7 +7863,7 @@ window.BZ={
     // return _Util._changeObjectKeys(d,BZ._codeToKeyDataMap)
   },
   assignShareData:function(dd,_ignoreSub){
-    BZ._keyToCodeDataMap=BZ._keyToCodeDataMap||_Util._invertObject(BZ._codeToKeyDataMap)
+    // BZ._keyToCodeDataMap=BZ._keyToCodeDataMap||_Util._invertObject(BZ._codeToKeyDataMap)
     // let d=_Util._changeObjectKeys(dd,BZ._keyToCodeDataMap)
     let d={...dd}
     for(var k in d){
