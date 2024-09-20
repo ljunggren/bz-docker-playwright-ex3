@@ -29834,7 +29834,8 @@ var _domActionTask={
           
           delete BZ._lastMouseAction
           if(d.type==1&&d.event&&d.event.type=="change"&&_Util._isStdInputElement(d.e)&&["INPUT","TEXTAREA"].includes(d.e.tagName)){
-            _domActionTask._doLog("Going to redo set value")
+            _reportRedoAction(d,a)
+
             $util.triggerChangeEvent(d.e,"",0,0,0,0,()=>{
               setTimeout(()=>{
                 delete d.e
@@ -29846,7 +29847,8 @@ var _domActionTask={
             })
           }else{
             delete d.e
-            _domActionTask._doLog("Going to redo click element")
+            _reportRedoAction(d,a)
+
             _domActionTask._trigger(d,function(){
               _domActionTask._doLog("redo last action: "+d.description)
               _call()
@@ -29862,26 +29864,38 @@ var _domActionTask={
       }
     }
 
-    function _hasWaitData(d,_fun){
-      let _has;
-      if(d&&_Util._isObjOrArray(d)){
-        for(let k in d){
-          let v=d[k]
-          if(v&&v.constructor==Promise){
-            if(!v._has){
-              v.then(x=>{
-                d[k]=x
-                _hasWaitData(d,_fun)
-              })
-            }
-            _has=1
-          }else if(_Util._isObjOrArray(v)){
-            _has=_has||_hasWaitData(v)
-          }
-        }
-      }
-      return _has
+    function _reportRedoAction(d,a){
+      d={...d}
+      delete d.e
+      a={...a}
+      delete a.e
+      bzComm.postToIDE({
+        fun:"reportRedoAction",
+        scope:"_ideTask",
+        ps:[d,a]
+      })
     }
+
+    // function _hasWaitData(d,_fun){
+    //   let _has;
+    //   if(d&&_Util._isObjOrArray(d)){
+    //     for(let k in d){
+    //       let v=d[k]
+    //       if(v&&v.constructor==Promise){
+    //         if(!v._has){
+    //           v.then(x=>{
+    //             d[k]=x
+    //             _hasWaitData(d,_fun)
+    //           })
+    //         }
+    //         _has=1
+    //       }else if(_Util._isObjOrArray(v)){
+    //         _has=_has||_hasWaitData(v)
+    //       }
+    //     }
+    //   }
+    //   return _has
+    // }
     function _doApiRegister(){
       if(!window.extensionContent){
         if(!_aiAuthHandler._isAuthItem(BZ._getCurModule())){
