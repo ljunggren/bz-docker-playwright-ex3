@@ -29739,7 +29739,6 @@ var _domActionTask={
             _domActionTask._doLog("Go to take screenshot")
             return _screenshotHandler._getScreenshot(0,0,function(v){
               r.CV=v
-              _domActionTask._doLog("Send result 3")
               _finalFun&&_finalFun(r);
               _finalFun=0
             })
@@ -29747,7 +29746,6 @@ var _domActionTask={
             _domActionTask._registerSuccessAction(_data)
           }
 
-          _domActionTask._doLog("Send result 2")
           _finalFun&&_finalFun(r);
           _finalFun=0
         }
