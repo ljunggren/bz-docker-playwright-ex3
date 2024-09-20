@@ -7719,6 +7719,7 @@ window.BZ={
   initAppData:function(){
     if(window.extensionContent){
       if(!BZ._initAppData){
+        BZ._initAppData=1
         console.log("initAppData",bzComm.getIframeId())
         bzComm.postToIDE({
           fun:"getSharedData",
@@ -7767,10 +7768,12 @@ window.BZ={
         scope:"BZ"
       })
       if(!bzComm.getIframeId()){
-        bzComm.postToIDE({
-          fun:"infoAppReady",
-          scope:"BZ"
-        })
+        setTimeout(()=>{
+          bzComm.postToIDE({
+            fun:"infoAppReady",
+            scope:"BZ"
+          })
+        },100)
       }
     }
   },
