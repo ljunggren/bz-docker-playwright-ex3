@@ -229,9 +229,8 @@ const Service = {
     Service.addTask({
       key:"coop-reload:",
       fun(msg){
-        msg=msg.substring(12).trim()
         Service.cancelChkCoop()
-        Service.reloadIDE(msg)
+        Service.reloadIDE()
       },
       timeout:Service.stdTimeout
     })
@@ -607,6 +606,9 @@ const Service = {
     await Service.browser.close();
     let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/.+$/,"/")
     console.log("Reload IDE: ", url);
+    let msg=this.page.evaluate(()=>{
+      return _cooperatorHandler._getReloadData()
+    })
     await Service.startIDE(url,msg);
 
     Service.init() 
