@@ -27251,7 +27251,6 @@ var TWHandler={
             _CtrlDriver._refreshDom($(".bz-action-list-content")[0])
           },100)
         }
-    
       }
       _finalFun()
     }  
