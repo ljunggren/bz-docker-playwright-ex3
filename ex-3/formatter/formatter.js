@@ -1501,7 +1501,7 @@ var formatter={
         type=name.split(/[ :]/)[0].toLowerCase()
         if(type.match(/validate/)){
           type="validate"
-        }else if(type=="group"||["given","when","then"].includes(name.toLowerCase())){
+        }else if(type=="group"||["given","when","then"].includes(type)){
           type="group"
           if(v.includes("Auto-one-action-group")){
             flash=1
@@ -1510,7 +1510,7 @@ var formatter={
           if(v.includes("attachScreenshotToReport")){
             screenshot=1
           }
-        }else if(type.match(/^(double|click|extract|refresh|call|load|hover|mousedown|mouseup|mousemove|drag|dragdrop)( |$)/)){
+        }else if(type.match(/^(mouse|click|extract|refresh|call|load|hover|mousedown|mouseup|mousemove|drag|dragdrop)( |$)/)){
           
         }else if(type.match(/execute api/)){
           type="api"
