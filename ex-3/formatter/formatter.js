@@ -1528,7 +1528,8 @@ var formatter={
           if(v.includes("Auto-one-action-group")){
             flash=1
           }
-        }else if(type=="script"){
+        }else if(type=="script"||type=="js"){
+          type="script"
           if(v.includes("attachScreenshotToReport")){
             screenshot=1
           }

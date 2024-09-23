@@ -43019,7 +43019,7 @@ var _ideActionManagement={
                     _tag:"span",
                     _endItem:1,
                     _attr:{
-                      class:function(d){
+                      class:function(d,cc,o){
                         var r=_IDE._data._curTest._result[d._item.i];
                         var c="btn btn-icon btn-condition "
                         var _rdm=_taskInfo._type;
@@ -43030,6 +43030,7 @@ var _ideActionManagement={
                           c+="bz-info"
                         }else{
                           c+="bz-"+(_ideTask._getResultIconByType(r._type)||(BZ._isPlaying()?"small-loading":""))
+                          o&&o.scrollIntoViewIfNeeded()
                         }
   
                         return c
