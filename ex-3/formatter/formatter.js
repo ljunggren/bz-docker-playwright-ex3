@@ -35,6 +35,14 @@ var formatter={
       color: red !important;
       font-size:25px;
     }`
+
+    if(location.href.match(/\/consoleFull/)){
+      s.innerHTML+=`
+      #side-panel{
+        width:240px !important;
+      }
+      `
+    }
     document.body.append(s)
 
   },
@@ -1514,7 +1522,7 @@ var formatter={
     }
 
     function retrieveActionData(v,p,testbz){
-      let x=v.match(/^([0-9]+)\: \#\#Action.*\#\# \(([0-9\/mt\-c.]+|tmp)\)\, *(.*)/)
+      let x=v.match(/^([0-9]+)\: \#\#Action.*\#\# \(([0-9\/mto\-c.]+|tmp)\)\, *(.*)/)
 
       let name=x[3].replace(/^trigger:/,"").trim(),type,flash,screenshot;
       if(name.match(/^(Set |Typing |Check )/)){
