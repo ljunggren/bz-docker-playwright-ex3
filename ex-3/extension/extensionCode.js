@@ -7058,8 +7058,8 @@ window._bzEval={
         k=0
       }else if(!k&&c=="/"&&s.trim().match(/[\(\[\=\?\:]$/)){
         k="/"
-      }else if(c==" "&&("+-*/([{%!\?\:".includes(v[i+1])||s.match(/([\s\(\{\[\+\-\*\?\:\/\%\&\|\^\~])$/))){
-        continue
+      // }else if(c==" "&&("+-*/([{%!\?\:".includes(v[i+1])||s.match(/([\s\(\{\[\+\-\*\?\:\/\%\&\|\^\~])$/))){
+      //   continue
       }else if((c=="/"||c=="*")&&s.match(/[^\\]\/$/)){
         _comment="/"+c
         s=s.replace(/[\/]$/,"")
@@ -7095,12 +7095,12 @@ window._bzEval={
           }
         }else if(k.l==c){
           k.n++
-        }else if(c.match(/\s/)){
-          let vr=v.substring(i+1).trim(),
-              vl=v.substring(0,i)
-          if(_uselessSpace(vr,vl,c)){
-            continue
-          }
+        // }else if(c.match(/\s/)){
+        //   let vr=v.substring(i+1).trim(),
+        //       vl=v.substring(0,i)
+        //   if(_uselessSpace(vr,vl,c)){
+        //     continue
+        //   }
         }
       }else if(c=="\n"){
         if((_endExpress[0]||"").replace(/ /g,"")==(s||"").replace(/ /g,"")){
