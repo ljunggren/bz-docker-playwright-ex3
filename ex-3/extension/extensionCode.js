@@ -24283,7 +24283,7 @@ var _localStorageManagement={
       localStorage.clear()
       localStorage.setItem("BZ-Reload","1")
       return setTimeout(()=>{
-        location.reload()
+        _IDE._reload()
       },BZ._isInDemo()?500:1)
     }
   },
@@ -29692,6 +29692,7 @@ var _domActionTask={
         _domActionTask._exeAction(_data,_setting,_backFun,_descDelay)
       },100)
     }
+    
     _domActionTask._lastAction=_data
     if(_data.asOneAction&&_data.oneActionList){
       return _domActionTask._exeOneActionList(_data,_setting,function(_result){
@@ -29711,6 +29712,17 @@ var _domActionTask={
         _domActionTask._doLog("Send back result",_data.description)
         r.exeTime=_data.exeTime
         if(_data.e){
+          if(r._type==2&&_data.doRetryPreviousAction){
+            if(!_data.redidPreviousAction&&BZ._lastMouseAction){
+              return _doRedoLastAction(r,_data,()=>{
+                _domActionTask._notReadyTime=0
+                _fun&&_fun(_result)
+              })
+            }else{
+              _data.redidPreviousAction=1
+              r.stillRetryable=0
+            }
+          }
           delete _data.e.bzTxtElement
         }
         r.img=r._img=_data._img
