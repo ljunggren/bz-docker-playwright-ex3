@@ -19,6 +19,9 @@ var formatter={
     document.body.append(s)
     s=document.createElement("style")
     s.innerHTML=`
+    #main-panel{
+      z-index:1000 !important;
+    }
     .bz-close-eye::before{
       content: "\\e9b0";
     }

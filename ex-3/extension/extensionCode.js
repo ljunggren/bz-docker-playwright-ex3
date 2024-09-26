@@ -29692,7 +29692,7 @@ var _domActionTask={
         _domActionTask._exeAction(_data,_setting,_backFun,_descDelay)
       },100)
     }
-    
+
     _domActionTask._lastAction=_data
     if(_data.asOneAction&&_data.oneActionList){
       return _domActionTask._exeOneActionList(_data,_setting,function(_result){
@@ -39527,7 +39527,7 @@ var _transferMonitor={
     }else{
       _transferMonitor._lastUIUpdate=_transferMonitor._lastUIUpdate||Date.now()
       var t=_transferMonitor._lastUIUpdate
-      if(Date.now()-t>500){
+      if(Date.now()-t>500&&document.body&&document.body.innerText&&document.body.innerText.trim()){
         _fun(t)
       }else{
         setTimeout(function(){
@@ -39682,7 +39682,7 @@ var _bzDomPicker={
 
     
     BZ._data._uiSwitch._tmpPath=p
-    if(p){
+    if(!_Util._isEmpty(p)){
       if(bzComm._getIframeIdByPath(p)==bzComm.getIframeId()){
         let o=$util.findDom(p);
         _bzDomPicker._popWin(o,{x:0,y:0});
