@@ -39530,6 +39530,9 @@ var _transferMonitor={
       if(Date.now()-t>500&&document.body&&document.body.innerText&&document.body.innerText.trim()){
         _fun(t)
       }else{
+        if(Date.now()-t>500){
+          _transferMonitor._lastUIUpdate=0
+        }
         setTimeout(function(){
           _transferMonitor._getUICompleteTime(_fun)
         },10)
