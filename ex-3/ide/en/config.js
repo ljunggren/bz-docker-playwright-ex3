@@ -681,4 +681,4 @@ try{
   exports._dictionaryConfig =_dictionaryConfig;  
   exports._attributeMap=_attributeMap;
   exports._scenarioSentences=_scenarioSentences;
-}catch(e){};var sysVersion='0.001';
+}catch(e){};var sysVersion='1';

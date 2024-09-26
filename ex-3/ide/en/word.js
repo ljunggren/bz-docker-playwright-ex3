@@ -226,6 +226,7 @@ var _bzMessage={
     },
     _error:{
       _missingPage:"Missing APP window",
+      _mappingError:"Mapping error",
       _missingScript:"Missing script",
       _missingRequest:"Missing request",
       _missingTokenSetting:"Missing token setting",
@@ -5022,4 +5023,4 @@ $test.data
     _title:"Validate Data / Extract Data",
     _extractData:"Extract Data"
   }
-};var sysVersion='0.001';
+};var sysVersion='1';
