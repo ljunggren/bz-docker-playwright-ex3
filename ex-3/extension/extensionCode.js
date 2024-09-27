@@ -30235,23 +30235,26 @@ var _domActionTask={
         }else{
           _result = _domActionTask._compareWithExpectation(_data,_result._extractData,_force);
         }
-        if(_result._type==2){
-          document.body._bzValidateData.find(x=>{
-            if(x._key==_data._key){
-              if(x._html&&x._html!=_calcMD5(_data.e.outerHTML)){
-                _result._type=_taskInfo._type._notReady;
+        if(document.body._bzValidateData){
+          if(_result._type==2){
+            document.body._bzValidateData.find(x=>{
+              if(x._key==_data._key){
+                if(x._html&&x._html!=_calcMD5(_data.e.outerHTML)){
+                  _result._type=_taskInfo._type._notReady;
+                }
               }
-            }
-          })
-        }else if(_result._type==1){
-          document.body._bzValidateData.find(x=>{
-            if(x._key==_data._key){
-              if(!x._html&&!_data.e){
-                _result._type=_taskInfo._type._notReady;
+            })
+          }else if(_result._type==1){
+            document.body._bzValidateData.find(x=>{
+              if(x._key==_data._key){
+                if(!x._html&&!_data.e){
+                  _result._type=_taskInfo._type._notReady;
+                }
               }
-            }
-          })
+            })
+          }
         }
+
       }else if(_data.content.type=="unexist"){
         _result._type=_taskInfo._type._failed
         _result._msg=_bzMessage._system._error._existError
@@ -31345,7 +31348,7 @@ var _domActionTask={
           _result._errSou=_taskInfo._errSou._exp;
           break;
         }else{
-          _valids.push($(":Contains("+vv+"):last")[0])
+          _valids.push($(o).find(":Contains("+vv+"):last")[0])
         }
       }catch(e){
         _result._type=_taskInfo._type._failed;
