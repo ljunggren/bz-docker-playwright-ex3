@@ -7925,6 +7925,21 @@ const _scriptActionHandler={
     }
   }
 };
+class $$Test {
+  constructor({code,name,data,loopData,defParameter,type,actions}) {
+    this.code = code;
+    this.name = name;
+    this.dataMap = data;
+    this.loopData = {loopValue:loopData};
+    this.defParameter = defParameter;
+    this.type = type;
+    this.actions = actions||[];
+  }
+
+  exe($parameter){
+    _ideTask._addScriptGenerateAction(this)
+  }
+};
 class $$action{
   constructor(action){
     for(let k in action){
