@@ -7918,6 +7918,9 @@ window.BZ={
     _fun&&_fun(v)
     return v
   },
+  closedApp:function(){
+    BZ.TW=0
+  }
 };
 //bz-ignore
 window._Util={
@@ -8022,7 +8025,7 @@ window._Util={
     }
   },
   _isBZTWOpened:function(){
-    return BZ.TW&&!BZ.TW.closed&&!window.extensionContent
+    return BZ.TW//&&!BZ.TW.closed&&!window.extensionContent
   },
   _openBZTW:function(_url,ws){
     BZ.TW=window.open(SERVER_HOST+"/empty.html?bzIde="+bzComm.getIdeTabId()+"#"+_url,"bz-client",ws);
@@ -15813,8 +15816,20 @@ window.bzComm={
     return window.curBZIframeId||parseInt(document.documentElement.getAttribute("iframeId")||0);
   },
   assignId:function(d){
+    if(!window.name&&parent==window){
+      window.name="bz-client"
+      location.reload()
+      return
+    }
     for(let k in d){
-      document.documentElement.setAttribute(k,d[k])
+      let v=d[k]
+      if(_Util._isObjOrArray(v)){
+        v=JSON.stringify(v).replace(/"/g,"'")
+      }
+      document.documentElement.setAttribute(k,v)
+    }
+    if(!d.app){
+      BZ.TW=0
     }
     if(window.curBZIframeId){
       document.documentElement.setAttribute("iframeId",curBZIframeId)
@@ -16114,7 +16129,7 @@ window.bzComm={
     }
   },
   popIDE:function(){
-    window.name=""
+    // window.name=""
     let p=localStorage.getItem("bz-ide")
     if(p){
       p=JSON.parse(p)
@@ -23968,30 +23983,6 @@ var _localStorageManagement={
   },
   _encrypt:function(a,bEncrypt){
     return a;
-    /*
-    if(!a||_Util._checkBrowserType().name.includes("Edge")){
-      return a;
-    }
-    var b=md5Value;
-    var c=""
-    var ii=0;
-    for(var i=0;i<a.length;i++){
-      var v1=a[i].charCodeAt();
-      var v2=0;
-      if(!b[ii]){
-        ii=0;
-      }
-      v2=b[ii].charCodeAt();
-      if(bEncrypt){
-        c+=String.fromCharCode((v1 ^ v2)+10);
-      }else{
-        v1-=10;
-        c+=String.fromCharCode(v1 ^ v2);
-      }
-      ii++;
-    }
-    return c;
-    */
   },
   _decrypt:function(a){
     return this._encrypt(a,false);
