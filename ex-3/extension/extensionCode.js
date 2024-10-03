@@ -29395,13 +29395,13 @@ var _domActionTask={
     }
   },
   _doLog:function(v,p){
-    if(bzComm._isIDE()||bzComm._isIDEExtension()){
+    if(bzComm._isIDE()){
       console.log(v+(p||""))
     }else{
       bzComm.postToIDE({
         fun:"log",
         scope:"console",
-        ps:[v+" (APP)"]
+        ps:[v+(bzComm._isIDEExtension()?"":" (APP)")]
       })
     }
   },
