@@ -15666,6 +15666,12 @@ window.bzComm={
     }
     _end()
     function _end(){
+      if(bzComm._isIDEExtension()){
+        setTimeout(()=>{
+          _domActionTask._doLog("BZ-LOG: Extension version: "+chrome.runtime.getManifest().version)
+        },1000)
+      }
+
       if(bzComm._isAppExtension()){
         bzComm.postToBackground({
           fun:"tabReady",
@@ -29389,13 +29395,13 @@ var _domActionTask={
     }
   },
   _doLog:function(v,p){
-    if(bzComm._isIDE()){
-      console.log("BZ-LOG: "+v+(p||""))
+    if(bzComm._isIDE()||bzComm._isIDEExtension()){
+      console.log(v+(p||""))
     }else{
       bzComm.postToIDE({
         fun:"log",
         scope:"console",
-        ps:["BZ-LOG: "+v+" (APP)"]
+        ps:[v+" (APP)"]
       })
     }
   },
@@ -31350,7 +31356,7 @@ var _domActionTask={
         break;
       }
     }
-    _bzDomPicker._showTmpCover(_valids,0,0,1)
+    _bzDomPicker._showTmpCover(_valids,_result._type!==_taskInfo._type._success,0,1)
     if(_force && _result._type!==_taskInfo._type._success){
       alert(_result._msg)
     }
@@ -43533,7 +43539,7 @@ var _bzDomPicker={
     }
     let _tag=_multiple?"div":"canvas"
 
-    this._tmpBox.innerHTML=`<${_tag} class='${bErr?'Err':''}BZCover BZIgnore' style='${s}background-color:rgb(255,105, 105,0.2);' title='${_bzMessage._method._rightClickToCancel}'></${_tag}>`;
+    this._tmpBox.innerHTML=`<${_tag} class='BZCover BZIgnore' style='${s}background-color:rgb(${!BZ._isPlaying()?'105,105,255':bErr?'255,0,0':"105,255,105"},0.2);' title='${_bzMessage._method._rightClickToCancel}'></${_tag}>`;
 
     o=this._tmpBox.childNodes[0];
 
@@ -43631,7 +43637,7 @@ var _bzDomPicker={
     _bzDomPicker._showTmpCover(os,0,0,1)
   },
   //os: elements, t, flash times, _fun: update cover and element, t
-  _showTmpCover:function(os,t,_fun,_keep){
+  _showTmpCover:function(os,_error,_fun,_keep){
     os=(os||[]).filter(x=>x)
 
     var _elementPath=0;
@@ -43697,7 +43703,7 @@ var _bzDomPicker={
           continue
         }
       }
-      let c=this._createTmpCover(o.ownerDocument, 0, 1);
+      let c=this._createTmpCover(o.ownerDocument, _error, 1);
       $(c).click(function(e){
         if(e.target==this&&!this.children.length){
           _bzDomPicker._removeTmpCover()
@@ -43711,19 +43717,12 @@ var _bzDomPicker={
         }
       })
       this._setTmpCoverPosByDom(o,c);
-      if(!t&&_fun){
+      if(_fun){
         _fun(o,c)
       }
       cs.push(c);
     }
-    if(t&&!_keep){
-      setTimeout(function(){
-        _bzDomPicker._removeTmpCover()
-        setTimeout(function(){
-          _bzDomPicker._showTmpCover(os,t-1,_fun);
-        },100)
-      },500);
-    }
+
     return cs;
   },
   _copyElementPath:function(o){
@@ -43743,7 +43742,7 @@ var _bzDomPicker={
         ps:[d]
       });
     }
-    let c=_bzDomPicker._flashTmpCover(d.element,1)
+    let c=_bzDomPicker._flashTmpCover(d.element)
     if(!c){
       return
     }
@@ -43806,7 +43805,7 @@ var _bzDomPicker={
     }
   },
   
-  _flashTmpCover:function(d,_chkCode){
+  _flashTmpCover:function(d,_error){
     if(!d){
       return
     }
@@ -43837,7 +43836,7 @@ var _bzDomPicker={
         bzComm.postToAppExtension({
           fun:"_flashTmpCover",
           scope:"_bzDomPicker",
-          ps:[e],
+          ps:[e,_error],
           toIFrameId:f
         })
       },100)
@@ -45994,7 +45993,7 @@ var _ideActionManagement={
                 if(_this.offset){
                   _bzDomPicker._showOffset(_this);
                 }else{
-                  _bzDomPicker._flashTmpCover(_this.element||_this.panel,1);
+                  _bzDomPicker._flashTmpCover(_this.element||_this.panel);
                 }
                 if(_this.type==4&&!_this.refOfSuccess){
                   setTimeout(()=>{
@@ -52534,7 +52533,7 @@ var _ideDataBind={
           if(_last){
             _last.bzReady=0
           }
-          _bzDomPicker._showTmpCover(vs,2);
+          _bzDomPicker._showTmpCover(vs);
           _ideDataBind._emptyScopeData=0
           setTimeout(function(){
             _bzDomPicker._removeTmpCover();

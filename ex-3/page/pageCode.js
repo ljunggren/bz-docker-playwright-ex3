@@ -8138,6 +8138,12 @@ window.bzComm={
     }
     _end()
     function _end(){
+      if(bzComm._isIDEExtension()){
+        setTimeout(()=>{
+          _domActionTask._doLog("BZ-LOG: Extension version: "+chrome.runtime.getManifest().version)
+        },1000)
+      }
+
       if(bzComm._isAppExtension()){
         bzComm.postToBackground({
           fun:"tabReady",
