@@ -1,13 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Boozang AI",
-  "short_name": "Boozang AI",
-  "description": "Boozang test automation is powered by AI. Tests can be recorded or written in clear text.",
-  "version": "4.0.0",
+  "name": "Boozang: Test automation powered by AI, Intelligent models and Cucumber",
+  "short_name": "Boozang",
+  "description": "Write tests, debug visually, analyze root causes and automate your CI builds. Tests can be recorded or written in clear text.",
+  "version": "4.0.1",
   "permissions": [
     "tabs",
     "webRequest",
-    "management",
     "storage",
     "scripting",
     "desktopCapture",
@@ -43,7 +42,7 @@
       ],
       "matchAboutBlank":true,
       "all_frames":true,
-      "js": ["extension/content.js","extension/extensionCode.js","formatter/formatter.js"]
+      "js": ["extension/content.js","extension/extensionCode.js"]
     }
   ],
   "icons": { 
