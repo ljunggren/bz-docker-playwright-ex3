@@ -8294,6 +8294,13 @@ window.bzComm={
     return window.curBZIframeId||parseInt(document.documentElement.getAttribute("iframeId")||0);
   },
   assignId:function(d){
+    if(bzComm._isIDEExtension()){
+      return bzComm.postToIDE({
+        fun:"assignId",
+        scope:"bzComm",
+        ps:[d]
+      })
+    }
     if(!window.name&&parent==window){
       window.name="bz-client"
       location.reload()
@@ -8313,12 +8320,13 @@ window.bzComm={
       document.documentElement.setAttribute("iframeId",curBZIframeId)
     }
     delete d.iframeId
-
-    bzComm._exeInIframes({
-      fun:"assignId",
-      scope:"bzComm",
-      ps:[d]
-    })
+    if(!bzComm._isIDE()){
+      bzComm._exeInIframes({
+        fun:"assignId",
+        scope:"bzComm",
+        ps:[d]
+      })
+    }
   },
   _exeInIframes:function(d){
     d.type="bz-exe"
