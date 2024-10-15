@@ -12677,6 +12677,10 @@ textarea{
   border-top:0 !important;
   border-right:0 !important;
 }
+.main-nav .bz-drag-over{
+  width: 56px;
+  height: 56px;
+}
 .bz-main-menu-root{
   /* border-bottom: var(--bz-border); */
   position: sticky;
