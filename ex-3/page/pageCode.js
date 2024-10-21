@@ -10339,6 +10339,31 @@ var TWHandler={
 
       }
     }
+    if(bzComm._isAppExtension()){
+      TWHandler._monitorScrollEvent();
+    }
+  },
+  _monitorScrollEvent:function(){
+    $(document.body).on('mouseover', function(e){
+      $(e.target).off("scroll",TWHandler._scrollFun);
+      $(e.target).on("scroll",TWHandler._scrollFun);
+    });
+  },
+  _scrollFun:function(event) {
+    clearTimeout(document._bzWheelEventTimer)
+    _doIt()
+    function _doIt(){
+      document._bzWheelEventTimer=setTimeout(function(){
+        $(".BZCover").toArray().forEach(x=>{
+          let r=x.o.getBoundingClientRect()
+          if(r.width||r.height){
+            $(x).css({left:r.left,top:r.top})
+          }else{
+            x.remove()
+          }
+        })
+      },300)
+    }
   },
   _chkPopInfo:function(_action,_second){ //for alert, confirm, prompt
     var a=TWHandler._popActual;
@@ -11361,6 +11386,7 @@ var TWHandler={
 
         if(!BZ._isAutoRunning()&&_IDE._data._curTest){
           setTimeout(function(){
+            _IDE._layout()
             _CtrlDriver._refreshDom($(".bz-action-list-content")[0])
           },100)
         }
