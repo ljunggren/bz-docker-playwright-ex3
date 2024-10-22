@@ -1674,6 +1674,7 @@ textarea.bz-feature-desc{
   border-bottom:var(--bz-border);
   position: sticky;
   top: 0;
+  overflow: hidden;
   z-index: 1000;
 }
 .top-nav *{
@@ -1697,6 +1698,10 @@ textarea.bz-feature-desc{
   font-weight: 500;
   color: #6F7A89 !important
 }
+.top-nav .bz-h-h-tab-items .bz-small-plus{
+  margin-top:4px;
+}
+  
 .top-nav-right{
   display: flex;
 }
@@ -2288,6 +2293,7 @@ hr {
   overflow: auto hidden;
 }
 .bz-with-toolbar.container{
+  overflow: hidden hidden;
   margin-right: var(--bar-width);
 }
 .bz-hover-box{
@@ -2307,6 +2313,7 @@ hr {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .form-control {
@@ -8151,6 +8158,11 @@ textarea.no-plus.form-control[readonly]{
   th.bz-data-type{
     visibility: hidden;
   }
+
+  .top-nav .bz-h-h-tab-items .bz-small-plus{
+    margin-top:1px;
+  }
+  
   :root {
     --bar-width:50px;
     --bar-width-half:25px;
@@ -12254,7 +12266,7 @@ textarea{
   border-bottom: var(--bz-border);
   border-left: var(--bz-border);
   border-radius: 0;
-  /* background: var(--tabs-background); */
+  background: var(--background-color);
 }
 .bz-toolbar-btn{
   height: 30px;
