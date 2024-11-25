@@ -12668,6 +12668,7 @@ window._Util={
     if(_Util._style){
       d.write("<style>"+_Util._style+"</style>")
     }else{
+      d.write("<link rel='stylesheet' type='text/css' href='"+bzComm.getResourceRoot()+"/css/icon.font.css'>");
       d.write("<link rel='stylesheet' type='text/css' href='"+bzComm.getResourceRoot()+"/css/js-editor.css'>");
       d.write("<link rel='stylesheet' type='text/css' href='"+bzComm.getResourceRoot()+"/css/main.max.css'>");
     }
@@ -26961,7 +26962,7 @@ var TWHandler={
         if(!bz){
           bzComm.postToAppExtension({
             fun:"_setRequestCount",
-            ps:{_url:this.url,i:1,_type:"socket"},
+            ps:[{_url:this.url,i:1,_type:"socket"}],
             scope:"TWHandler"
           });
 
@@ -26971,7 +26972,7 @@ var TWHandler={
               var o=_win._bzSocket
               bzComm.postToAppExtension({
                 fun:"_setRequestCount",
-                ps:{_url:this.url,i:1,_type:"socket"},
+                ps:[{_url:this.url,i:1,_type:"socket"}],
                 scope:"TWHandler"
               });
             })

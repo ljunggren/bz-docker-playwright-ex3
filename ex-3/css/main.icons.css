@@ -448,16 +448,28 @@
 .bz-play-auto::before{
   color:var(--bz-green);
   content: "\ea19";
+  left: 2px;
+  top: 1px;
+}
+
+.bz-small-btn.bz-play-auto::before{
   font-size: 12px;
+  left: 0;
+  top: 0;
 }
 
 .bz-play-auto::after{
   color:var(--bz-green);
   content: "\e9bd";
   left: -9px;
-  font-size: 6px;
+  font-size: 7px !important;
   top: -3px;
 }
+
+.bz-small-btn.bz-play-auto::after{
+  font-size: 6px !important;
+}
+
 
 .bz-ai::before{
   content:"\e95e";
