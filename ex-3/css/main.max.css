@@ -11189,6 +11189,7 @@ table.bz-table thead{
   white-space: nowrap;
   flex: 1;
   display: flex;
+  padding-top:4px;
 }
 
 .bz-tmp-data-ctrl{
@@ -11199,6 +11200,8 @@ table.bz-table thead{
 .bz-data-ctrl button,
 .bz-api-ctrl button{
   margin:0 5px;
+  position: relative;
+  top: -3px;
 }
 
 .bz-test-ex-header{
