@@ -990,7 +990,22 @@ input[type="radio"]:checked:before{
   color:var(--text-color) !important;
   content:"\ea54";
 }
-
+.bz-dom-picker-tree{
+  font-size:13px;
+  background-color: var(--editor-background-color);
+  margin: 5px;
+  padding:7px;
+  list-style-type:none;
+  height: calc(100% - 25px);
+  overflow: auto;
+}
+.bz-dom-picker-sibling-box{
+  color:#999;
+  line-height: 15px;
+}
+.bz-dom-picker-sibling-box .active{
+  display:none;
+}
 .dom-picker input[type="checkbox"]:checked:before,
 .dom-picker input[type="radio"]:checked:before{
   content:"" !important;
