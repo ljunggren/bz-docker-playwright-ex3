@@ -12,11 +12,10 @@
   margin-left: -8px;
   position: relative;
   top: 5px;
-  left: 2px;
+  left: 5px;
 }
 .bz-extend-sign::after{
-  content: "◢";
-  font-size: 8px;
+  content: "\ea1c";
 }
 
 .bz-corner-resize:hover:before{
@@ -166,11 +165,15 @@
   margin-right:-10px;
 }
 
+.bz-link2::before{
+  content:"\e9ac";
+}
 .bz-followSameURL::before{
   content:"\e9ac";
   position: relative;
   left: 3px;
 }
+
 .bz-followSameURL::after{
   content:"\ea02";
   position: relative;
