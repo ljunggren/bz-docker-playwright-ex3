@@ -4403,7 +4403,9 @@ textarea{
   display: inline-table;
   float: right;
 }
-
+.bz-workflow-setting{
+  min-height: 200px;
+}
 .bz-workflow-item{
   white-space: initial;
 }
