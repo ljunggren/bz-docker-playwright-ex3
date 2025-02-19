@@ -13515,7 +13515,7 @@ td:last-child.bz-selected-td-t,
   --chat-self-msg: #060;
 
   --pillbox-color: #333;
-  --bz-pressed-color: #444;
+  --bz-pressed-color: #222;
   --bz-pressed-border: #666; 
 
   --tabs-background: #222;
@@ -13589,7 +13589,7 @@ td:last-child.bz-selected-td-t,
     --chat-self-msg: #060;
   
     --pillbox-color: #333;
-    --bz-pressed-color: #444;
+    --bz-pressed-color: #222;
     --bz-pressed-border: #666; 
 
     --tabs-background: #222;
