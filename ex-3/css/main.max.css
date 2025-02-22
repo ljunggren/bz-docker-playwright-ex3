@@ -7778,7 +7778,6 @@ div.bz-middle-table{
   text-align:center;
 }
 
-
 .bz-std-tabs .bz-h-h-tab-item{
   padding:0px 8px;
 }
@@ -8205,6 +8204,9 @@ textarea.no-plus.form-control[readonly]{
 @media only screen and (max-width: 560px) {
   .bz-plus-text{
     display:none;
+  }
+  .bz-btn-bar .btn-icon-text::before{
+    margin-right:0;
   }
 }
 @media only screen and (max-width: 450px) {
