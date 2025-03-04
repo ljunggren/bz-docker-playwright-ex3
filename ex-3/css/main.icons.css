@@ -39,8 +39,12 @@
   content: "\e951";
 }
 
-.bz-panel::before{
+.bz-form::before{
   content: "\ea27";
+}
+
+.bz-panel::before{
+  content: "\e956";
 }
 
 .bz-popout::before{
