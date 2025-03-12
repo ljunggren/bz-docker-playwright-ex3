@@ -602,17 +602,22 @@ const Service = {
       $util.getCoopStatus()
     })
   },
-  async reloadIDE(){
-    let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/.+$/,"/")
-    console.log("Reload IDE: ", url);
-    let msg=await this.page.evaluate(()=>{
-      return BZ.getReloadData()
-    })
-
-    await Service.browser.close();
-    await Service.startIDE({url:url,data:msg});
-
-    Service.init() 
+  async reloadIDE(v){
+    if(v){
+      console.log(v)
+    }
+    setTimeout(async ()=>{
+      let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/.+$/,"/")
+      console.log("Reload IDE: ", url);
+      let msg=await this.page.evaluate(()=>{
+        return BZ.getReloadData()
+      })
+  
+      await Service.browser.close();
+      await Service.startIDE({url:url,data:msg});
+  
+      Service.init() 
+    },1000)
   },  
   async startIDE({url,data,listsuite,listscenarios,tests}){
     Service.startUrl = url;
