@@ -605,16 +605,24 @@ const Service = {
   async reloadIDE(v){
     if(v){
       console.log(v)
+    }else{
+      console.log("Reload from IDE")
     }
     setTimeout(async ()=>{
       let url=Service.startUrl.replace(/\/m[0-9]+\/t[0-9]+\/.+$/,"/")
-      console.log("Reload IDE: ", url);
+      console.log("Reload IDE:",url, Date.now());
       let msg=await this.page.evaluate(()=>{
         return BZ.getReloadData()
       })
   
+      console.log("Browser closing:",Date.now())
       await Service.browser.close();
-      await Service.startIDE({url:url,data:msg});
+      console.log("Browser closed:",Date.now())
+      setTimeout(async ()=>{
+        console.log("Browser opening:",Date.now())
+        await Service.startIDE({url:url,data:msg});
+        console.log("Browser opened:",Date.now())
+      },1000)
   
       Service.init() 
     },1000)
