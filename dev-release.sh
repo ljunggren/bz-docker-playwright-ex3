@@ -14,7 +14,7 @@ USERNAME=styrman
 IMAGE=boozang-playwright-ex3-dev
 
 # run build
-./build.sh
+./dev-build.sh
 
 # push it
 docker push $USERNAME/$IMAGE:latest
