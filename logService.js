@@ -667,14 +667,15 @@ const Service = {
     Service.setPage(page,browser);
 
     const response = await page.goto(url);
-
     if(data){
+      await page.waitForTimeout(5000);
+      console.log("Doing Reboot ...")
       await page.evaluate((d)=>{
         window["bz-reboot"]=1
         window["coop-tasks"]=d
       },data);
     }else if(tests){
-      console.log("Going to post tmp tasks .....")
+      console.log("Doing tmp tasks ...")
       setTimeout(()=>{
         console.log("post task:"+tests)
         page.evaluate((v)=>{
@@ -682,6 +683,7 @@ const Service = {
         }, tests);
       },5000)
     }else if(listsuite||listscenarios){
+      console.log("Doing list suite ...")
       Service.setBeginningFun(function(){
         Service.insertFileTask(function(){
           Service.result = 0;
