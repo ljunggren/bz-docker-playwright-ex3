@@ -13,7 +13,7 @@ USERNAME=styrman
 # image name
 IMAGE=boozang-playwright-ex3-dev
 
- build
+# build
 ./dev-build-lws.sh
 
 # push it
