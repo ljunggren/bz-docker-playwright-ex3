@@ -6600,6 +6600,7 @@ th.bz-data-type{
 }
 .bz-element-tab-bar{
   margin:10px 0 !important;
+  display: flex;
 }
 
 .bz-module-title{
