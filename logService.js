@@ -302,6 +302,7 @@ const Service = {
           Service.insertHandleIdling();
           Service.wakeupIDE()
         }else{
+          Service.result=2
           Service.shutdown("Shutdown: No task to run")
         }
       },Service.idlingTimerValue)
