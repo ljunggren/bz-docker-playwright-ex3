@@ -13,3 +13,6 @@ USERNAME=styrman
 # image name
 IMAGE=boozang-runner
 docker build --platform linux/amd64 -t $USERNAME/$IMAGE:latest .
+
+IMAGE=bz-docker-playwright-ex3
+docker build --platform linux/amd64 -t $USERNAME/$IMAGE:latest .
