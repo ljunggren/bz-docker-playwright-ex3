@@ -35,6 +35,7 @@
   --middle-text-color:#666;
   --jk-key-color:#009;
   --header-color:#CCC;
+  --bz-form-panel-color:#DDD;
   --equal-color:#DDD;
   --diff-color:#EEE;
 
@@ -6038,6 +6039,9 @@ legend{
   background-color:inherit;
   display: flex;
   flex-direction: column;
+}
+.bz-form-panel{
+  background-color: var(--bz-form-panel-color);
 }
 .bz-model-fields-box{
   overflow-x:hidden;
@@ -13496,6 +13500,7 @@ td:last-child.bz-selected-td-t,
   --active-btn-color:#ab6bfa;
   --print-line-color:#CCC;
   --header-color:#333;
+  --bz-form-panel-color:#222;
   --equal-color:#222;
   --diff-color:#111;
   --highlight-border-color: #bb86fb;
@@ -13572,6 +13577,7 @@ td:last-child.bz-selected-td-t,
     --active-btn-color:#ab6bfa;
     --print-line-color:#CCC;
     --header-color:#333;
+    --bz-form-panel-color:#222;
     --equal-color:#222;
     --diff-color:#111;
   
@@ -13669,6 +13675,7 @@ td:last-child.bz-selected-td-t,
     --active-btn-color:#0069FF;
     --print-line-color:#333;
     --header-color:#CCC;
+    --bz-form-panel-color:#DDD;
     --equal-color:#DDD;
     --diff-color:#EEE;
   
