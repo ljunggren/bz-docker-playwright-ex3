@@ -11,5 +11,5 @@ set -ex
 USERNAME=styrman
 
 # image name
-IMAGE=boozang-runner
+IMAGE=boozang-runner-dev
 docker build --platform linux/amd64 -t $USERNAME/$IMAGE:latest .
