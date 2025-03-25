@@ -44,7 +44,7 @@ winpty docker push $USERNAME/$IMAGE:$version
 winpty docker push $USERNAME/$IMAGE:$major
 winpty docker push $USERNAME/$IMAGE:$major.$minor
 
-IMAGE=bz-docker-plawright-ex3
+IMAGE=bz-docker-playwright-ex3
 winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
 winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major
 winpty docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major.$minor
