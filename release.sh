@@ -44,7 +44,7 @@ docker push $USERNAME/$IMAGE:$version
 docker push $USERNAME/$IMAGE:$major
 docker push $USERNAME/$IMAGE:$major.$minor
 
-IMAGE=bz-docker-playwright-ex3
+IMAGE=boozang-playwright-ex3
 
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$major

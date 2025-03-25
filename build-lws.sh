@@ -14,5 +14,5 @@ USERNAME=styrman
 IMAGE=boozang-runner
 winpty docker build --platform linux/amd64 -t $USERNAME/$IMAGE:latest .
 
-IMAGE=bz-docker-playwright-ex3
+IMAGE=boozang-playwright-ex3
 winpty docker build --platform linux/amd64 -t $USERNAME/$IMAGE:latest .
