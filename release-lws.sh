@@ -25,7 +25,7 @@ minor=`echo $version | cut -d. -f2`
 revision=`echo $version | cut -d. -f3`
 
 # run build
-./build.sh
+./build-lws.sh
 
 # tag it
 git add -A
