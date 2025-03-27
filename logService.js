@@ -351,6 +351,16 @@ const Service = {
       oneTime:1,
       timeout:Service.stdTimeout
     })
+
+    Service.addTask({
+      key:"shutdown",
+      fun(msg){
+        Service.bzLoad=1
+        Service.shutdown()
+      },
+      timeout:Service.stdTimeout
+    })
+
   },
   /*new*
   reset(forKeep){
@@ -723,6 +733,8 @@ const Service = {
     (async () => {
       await Service.page.close()
       await Service.browser.close()
+      console.log("Browser closed!")
+
       setTimeout(()=>{
         //killer(Service.browser.process().pid, 'SIGKILL');
         setTimeout(()=>{
