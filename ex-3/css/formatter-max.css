@@ -1,4 +1,5 @@
 :root {
+  --bz-warn-color: #df3b69;
   --background-color: #FFF;
   --button-background-color: #CCC;
   --box-background-color: #DDD;
@@ -45,6 +46,14 @@
   content: "\e936";
 }
 
+.bz-before-right-8::before{
+  margin-right:8px;
+}
+
+.bz-logs::before{
+  content:"\e94e";
+}
+
 .bz-download::before{
   content: "\ea2b";
 }
@@ -54,7 +63,12 @@
 .bz-analyze:before {
   content:"📋";
 }
-
+.bz-max-view::before{
+  content: "\ea03";
+}
+.bz-min-view::before{
+  content: "\ea04";
+}
 .bz-json-validation:before,
 .bz-ab:before{
   content:"🆎";
@@ -320,9 +334,10 @@ span.bz-success-large{
 
 #project-init{
   position: sticky;
-  top: 34px;
+  top: 67px;
   z-index: 1;
 }
+
 #project-init>pre,
 #project-init>div{
   background-color: var(--box-background-color);
@@ -343,6 +358,14 @@ button:disabled{
   border-radius: 5px;
   background-color: var(--box-background-color) !important;
   border:2px solid var(--box-background-color) !important;
+}
+
+.bz-log-box.in-max{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100%;
 }
 .bz-running-large,
 .bz-running{
@@ -476,6 +499,9 @@ body>.bz-log-box .bz-header .bz-timer{
   width: 50px;
   white-space:nowrap;
 }
+#project-init .bz-time{
+  margin-left:10px;
+}
 .bz-wait{
   color:#999;
 }
@@ -523,13 +549,8 @@ button.bz-icon-txt{
 
 
 .bz-line:hover,
-.bz-row:hover,
-.bz-title:hover,
-.bz-title:hover *{
+.bz-row:hover{
   background-color:var(--hover-background-color) !important;
-}
-.bz-content:hover{
-  background-color:var(--box-background-color) !important;
 }
 
 .bz-ctrl-box{
@@ -570,6 +591,7 @@ button{
   background-color: var(--box-background-color) !important;
   top:0;
   position:sticky;
+  display: flex;
 }
 .bz-result-header,
 #project-init{
@@ -747,7 +769,7 @@ body>.bz-log-box .bz-sort-bar{
 
 .bz-info-box{
   display:flex;
-  margin-left: 10px;
+  margin-left: 5px;
   flex:1
 }
 
@@ -793,9 +815,14 @@ body>.bz-log-box .bz-sort-bar{
   font-size:11px !important;
 }
 .bz-show-failed-only{
-  line-height: 34px;
-  margin-right: 10px;
+  position: relative;
+  left: 5px;
 }
+#worker-list{
+  position: relative;
+  top: 0;
+}
+
 .bz-header input[type=checkbox]{
   margin-right: 5px;
 }
@@ -965,22 +992,70 @@ input[type=number]{
 }
 #bz-chk-replay-all{
   display:none;
-  float:right;
-  margin-right:3px;
+  margin-right:10px;
 }
 .bz-result-header{
-  color:var(--header-color);
   position: sticky;
-  top: 164px;
+  top: 34px;
+  height:33px;
   background: var(--panel-background-color);
   padding: 7px;
   margin-left: 0px;
   z-index: 1;
 }
+
+.bz-summary-report{
+  text-decoration: underline;
+  margin-left:20px;
+  cursor: pointer;
+}
+
+.bz-info-icon{
+  padding: 6px;
+  border-radius: 20px;
+  position: relative;
+  left: 10px;
+  background-color: var(--text-color) !important;
+  color: var(--bz-warn-color) !important;
+  display: inline-block;
+  height: 16px;
+  line-height: 5px;
+  margin-right: 5px;
+  width: 16px;
+  top: 1px;
+  font-size: 13px;
+}
+
+.bz-missing-workers-log{
+  left:20px;
+  background-color:var(--bz-warn-color) !important;
+  padding: 2px 12px 5px 12px;
+  border-radius: 15px;
+}
+
+#bz-sum-report{
+  cursor:pointer;
+}
+
+.bz-missing-workers-log,
 #bz-result-content{
   font-weight:bold;
   white-space:pre;
+  position: relative;
 }
+
+.failed-info{
+  display: none;
+}
+
+.bz-show-failed-info{
+  top:-7px;
+}
+
+.bz-show-failed-info .failed-info{
+  display: initial;
+}
+
 .bz-hide-scope-header:before{
   display:none;
 }
@@ -1037,6 +1112,7 @@ input[type=number]{
 /**/
 @media (prefers-color-scheme: dark) {
   :root {
+    --bz-warn-color: #df3b69;
     --background-color: #000;
     --button-background-color: #000;
     --box-background-color: #222;
@@ -1056,6 +1132,10 @@ input[type=number]{
     --std-hover-color:#ff5;
     --header-color:#FF3;
     --text-color:#FFF;
+  }
+
+  .bz-missing-workers-log{
+    padding: 0px 12px 5px 12px;
   }
 
   .jenkins-button,*:not(svg,use,.bz-log-box *){

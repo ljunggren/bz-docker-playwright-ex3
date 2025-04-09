@@ -1,9 +1,5 @@
 var bzFormat;
 let defaultCode={
-  identifyMaster:`function(){
-  return location.href.match(/[\/]console(Full)?$/)
-      || location.href.match(/[\/]builds[\/][0-9]+[\/]logs[\/][0-9]+$/)
-}`,
   identifyWorker:`function(){
   let k=location.href.match(/[\/]([0-9]+)[\/]/)[1];
   return [2,3].map(x=>{
@@ -25,21 +21,22 @@ $("#ide").click(()=>{
 })
 $("#formatPage").click(()=>{
   bzFormat.gotoOrg=0
-  updateSetting(()=>{
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      // 重新加载当前标签页
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    bzFormat.forceFormat=tabs[0].url
+    updateSetting(()=>{
       chrome.tabs.reload(tabs[0].id);
-    });
-  })
+    })
+  });
 });
 $("#orgPage").click(()=>{
   chrome.tabs.query({active: true, currentWindow: true}, function(v){
     bzFormat.gotoOrg=1
-    chrome.runtime.sendMessage({ pop:1,fun:"formatLog",data:{
-      id:v[0].id,
-      data:bzFormat
-    }});
-    window.close();
+    bzFormat.forceFormat=0
+    updateSetting(()=>{
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.reload(tabs[0].id);
+      });
+    })
   });
 })
 $(".bz-tab").click(function(){
@@ -98,7 +95,6 @@ function init(){
       bzFormat=JSON.parse(d["bz-log-format"])
     }
 
-bzFormat.identifyMaster=bzFormat.identifyMaster||defaultCode.identifyMaster
 bzFormat.identifyWorker=bzFormat.identifyWorker||defaultCode.identifyWorker
 bzFormat.lineClear=bzFormat.lineClear||defaultCode.lineClear
 
@@ -115,7 +111,6 @@ bzFormat.lineClear=bzFormat.lineClear||defaultCode.lineClear
     
     $("#retrieveWorkerLog").attr("checked",bzFormat.retrieveWorkerLog);
     
-    $("#identifyMaster").val(bzFormat.identifyMaster)
     $("#lineClear").val(bzFormat.lineClear)
     $("#identifyWorker").val(bzFormat.identifyWorker)
     $("#scenarioTime").val(bzFormat.scenarioTime);
@@ -125,7 +120,7 @@ bzFormat.lineClear=bzFormat.lineClear||defaultCode.lineClear
     $("#actionTime").val(bzFormat.actionTime)
     bzFormat.account=bzFormat.account||{}
     updateSetting()
-    $("#scenarioTime,#testTime,#declareTime,#initTime,#actionTime,#lineClear,#identifyMaster,#identifyWorker").blur(function(){
+    $("#scenarioTime,#testTime,#declareTime,#initTime,#actionTime,#lineClear,#identifyWorker").blur(function(){
       updateSetting()
     })
     $("#autoFormat,#retrieveWorkerLog,#lineClearChk,#withToken").click(function(){
@@ -333,7 +328,6 @@ function updateSetting(_fun){
   bzFormat.lineClearChk=$("#lineClearChk")[0].checked
   bzFormat.withToken=$("#withToken")[0].checked
   
-  bzFormat.identifyMaster=$("#identifyMaster").val()
   bzFormat.lineClear=$("#lineClear").val()
   if(bzFormat.autoFormat){
     $("#pageScriptPanel").show()
@@ -358,13 +352,16 @@ function updateSetting(_fun){
   bzFormat.declareTime=$("#declareTime").val()
   bzFormat.initTime=$("#initTime").val()
   bzFormat.actionTime=$("#actionTime").val()
-  chrome.storage.sync.set({"bz-log-format":JSON.stringify(bzFormat)},_fun)
+  chrome.storage.sync.set({"bz-log-format":JSON.stringify(bzFormat)})
 
   if(bzFormat.account.version){
     $("#ide").show()
   }else{
     $("#ide").hide()
   }
+  setTimeout(()=>{
+    _fun&&_fun()
+  },100)
 }
 init();
 // getPageInfo();

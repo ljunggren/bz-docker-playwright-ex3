@@ -18,6 +18,15 @@
   content: "\ea1c";
 }
 
+.worker-list{
+  position: relative;
+  top: 0;
+}
+
+.bz-max-view::before{
+  content: "\ea03";
+}
+
 .bz-corner-resize:hover:before{
   color:#999;
 }
