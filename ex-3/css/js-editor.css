@@ -2,7 +2,6 @@
  
 .bz-js-editor {
   height:calc(100% - 12px);
-  min-height: 15px;
   margin:0;
   font-family: 'Roboto Mono', monospace !important;
   font-size: 12px;
@@ -12,6 +11,7 @@
   overflow: hidden;
   overflow-x:hidden;
   flex:1;
+  min-height: 25px;
 }
 
 .bz-js-editor:focus{
@@ -58,6 +58,7 @@
   font-family: 'Roboto Mono', monospace !important;
   position: relative;
   width:10px;
+  min-height: 15px;
 }
 .bz-js-editor-label{
   position:absolute;

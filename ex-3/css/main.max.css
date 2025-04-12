@@ -6207,8 +6207,7 @@ legend{
 }
 .bz-element-path .bz-js-editor{
   border-top:0;
-  padding-top:5px;
-  padding-bottom:5px;
+  padding:0 5px;
   border-color:var(--input-border-color);
 }
 .bz-model-form-btn.next{

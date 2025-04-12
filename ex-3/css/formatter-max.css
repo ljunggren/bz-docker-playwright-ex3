@@ -669,8 +669,7 @@ body>.bz-log-box .bz-sort-bar{
   top:3px;
 }
 
-.bz-chk-replay{
-  display:none;
+.bz-chk-replay1{
   margin:0 10px 0 0 !important;
 }
 
@@ -990,8 +989,7 @@ body {
 input[type=number]{
   width:50px;
 }
-#bz-chk-replay-all{
-  display:none;
+#bz-chk-replay-all1{
   margin-right:10px;
 }
 .bz-result-header{
