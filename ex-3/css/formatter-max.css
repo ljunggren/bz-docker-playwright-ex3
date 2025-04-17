@@ -127,15 +127,6 @@
 .bz-delete::before{
   content: "\e971";
 }
-.bz-to-failed::before{
-  margin-right: -16px;
-  top: -7px;
-  font-size: 8px;
-}
-.bz-to-failed{
-  color: red !important;
-  font-size:25px;
-}
 .bz-a-z:before{
   content:"↓";
 }
@@ -275,7 +266,6 @@ span.bz-success-large{
 }
 .bz-play-btn:before{
   margin-right:5px;
-  color:#FFF;
 }
 .bz-play:before{
   font-size:18px;
@@ -549,7 +539,9 @@ button.bz-icon-txt{
 
 
 .bz-line:hover,
-.bz-row:hover{
+.bz-row:hover,
+.bz-title:hover,
+.bz-title:hover *{
   background-color:var(--hover-background-color) !important;
 }
 
@@ -981,6 +973,15 @@ body {
   padding: 2px 15px;
   line-height: 20px;
   cursor: pointer;
+}
+
+.bz-retry-action::before{
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  border-radius: 20px;
+  background-color: var(--bz-warn-color) !important;
+  line-height: 20px;
 }
 .std:hover{
   background-color: var(--std-hover-color);
