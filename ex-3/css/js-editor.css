@@ -59,6 +59,7 @@
   position: relative;
   width:10px;
   min-height: 15px;
+  top:5px;
 }
 .bz-js-editor-label{
   position:absolute;
