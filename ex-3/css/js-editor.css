@@ -61,6 +61,10 @@
   min-height: 15px;
   top:5px;
 }
+.bz-pop-win .bz-modal-body .bz-js-editor div{
+  top:0;
+}
+
 .bz-js-editor-label{
   position:absolute;
   border:var(--bz-border);

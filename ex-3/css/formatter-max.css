@@ -306,6 +306,9 @@ span.bz-success-large{
   content: "\ea1c" !important;
 }
 
+.bz-minus::before{
+  content: "\e9b5";
+}
 .bz-plus::before{
   content: "\e9b4";
 }
@@ -437,6 +440,9 @@ button:disabled{
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-left: 5px;
+}
+.bz-title-text a{
+  cursor: pointer;
 }
 .bz-line.bz-title-text:hover,
 .bz-title .bz-title-text:hover{
@@ -749,6 +755,7 @@ body>.bz-log-box .bz-sort-bar{
   margin-left:5px;
 }
 
+
 .bz-switch{
   width:30px;
   margin:0 5px;
@@ -767,6 +774,14 @@ body>.bz-log-box .bz-sort-bar{
 .bz-header .bz-icon{
   width:30px;
   margin:2px 5px;
+}
+
+.bz-indent-switch{
+  margin:0 !important;
+}
+
+.bz-level-action .bz-item-name{
+  margin-left:20px;
 }
 
 .bz-switch,.bz-camera,.bz-play,.bz-new-bug,.bz-bug,.bz-cross,.bz-download,.bz-setting,.bz-search,.bz-ab,.bz-analyze,.bz-result.bz-failed{
@@ -1131,15 +1146,37 @@ input[type=number]{
     --std-hover-color:#ff5;
     --header-color:#FF3;
     --text-color:#FFF;
+    --selection-color:#333;
   }
-
+  
   .bz-missing-workers-log{
     padding: 0px 12px 5px 12px;
   }
 
-  .jenkins-button,*:not(svg,use,.bz-log-box *){
+  .jenkins-button,*:not(svg,use,.bz-log-box *,.CodeMirror *){
     color:#CCC !important;
     background-color:#111 !important;
+  }
+
+  
+  .CodeMirror pre.CodeMirror-cursor{
+    border-left:1px solid #FFF !important;
+  }
+
+  .cm-def{
+    color:#66F !important;
+  }
+
+  .cm-builtin{
+    color:#69a !important;
+  }
+
+  .cm-attribute{
+    color:#66C !important;
+  }
+
+  .cm-keyword{
+    color:#99F !important;
   }
 
   .bz-log-box *{
