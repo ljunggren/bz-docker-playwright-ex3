@@ -190,10 +190,6 @@ globalThis.bgUtil={
         })
       }
     }
-  },
-  reload:function(t,v){
-    v=parseInt(v)
-    chrome.tabs.reload(v);
   }
 }
 
