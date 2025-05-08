@@ -381,9 +381,8 @@ const _tabManagement={
       if(t){
         if(t.ide){
           _tabManagement._askBZInfo(t,function(){
-            let id=_tabManagement._getIdeAppId(t)
-            if(id){
-              let a=_tabManagement._map[id]
+            if(t.myApp){
+              let a=_tabManagement._map[t.myApp]
               if(a){
                 a.myIde=t.id
                 a.app=1
@@ -481,27 +480,6 @@ const _tabManagement={
     }else{
       fun()
     }
-  },
-  _getIdeAppId:function(ide){
-    if(ide.myApp){
-      return ide.myApp
-    }
-    let o=Object.values(_tabManagement._map).find(x=>x.myIde==ide.id)
-    if(o){
-      ide.myApp=o.id
-      return o.id
-    }
-  },
-  _getAppIdeId:function(app){
-    if(app.myIde){
-      return app.myIde
-    }
-    let o=Object.values(_tabManagement._map).find(x=>x.myApp==app.id)
-    if(o){
-      app.myIde=o.id
-      return o.id
-    }
-
   }
 }
 _tabManagement.init()
