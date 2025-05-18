@@ -1065,6 +1065,20 @@
   content: "\ea1e";
 }
 
+.bz-switch-to-set::before{
+  content: "↷";
+  color: var(--active-color);
+  top: -7px;
+  font-size: 12px;
+  left: 2px;
+  font-weight: bold;
+}
+.bz-switch-to-set::after{
+  content: "\e92d";
+  left: -5px;
+  top: 4px;
+}
+
 .bz-keyboard::before{
   content: "\e92d";
 }
