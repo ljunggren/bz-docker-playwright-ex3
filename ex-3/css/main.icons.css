@@ -41,6 +41,13 @@
   cursor: se-resize;
 }
 
+.bz-retry::after{
+  content: "\ea02";
+  left: -2px;
+  font-size: 7px;
+  top: 3px;
+}
+
 .bz-clear::before{
   content: "\ea05";
 }
@@ -1506,6 +1513,12 @@
   height: 15px;
   -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
+  border-top-color: var(--scrollbar-color-thumb) !important;
+  border-bottom-color: var(--scrollbar-color-thumb) !important;
+  border-left-color: var(--scrollbar-color-thumb) !important;
+}
+.bz-small-loading.bz-retrying{
+  border-color:rgba(243, 243, 243,0) red !important;
   border-top-color: var(--scrollbar-color-thumb) !important;
   border-bottom-color: var(--scrollbar-color-thumb) !important;
   border-left-color: var(--scrollbar-color-thumb) !important;
