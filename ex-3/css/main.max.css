@@ -12096,6 +12096,7 @@ select.form-control.bz-input-icon{
   border:var(--bz-border);
 }
 
+.bz-help-item-1,
 .bz-help-item{
   opacity: 0;
   background-color: #666;
@@ -12105,6 +12106,7 @@ select.form-control.bz-input-icon{
   border-radius: 10px;
 }
 
+.bz-help-item-1::after,
 .bz-help-item:after{
   content:"?";
   font-size: 11px;
@@ -12113,9 +12115,11 @@ select.form-control.bz-input-icon{
   text-align: center;
 }
 
+.bz-help-item-1:hover,
 .bz-help-item:hover{
   opacity: 1 !important;
 }
+.bz-maybe-no-exist:hover .bz-help-item-1,
 .bz-h-h-tab-content:hover .bz-help-item,
 fieldset:hover legend .bz-help-item,
 .input-group:hover .bz-help-item,
