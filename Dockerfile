@@ -62,7 +62,7 @@ EXPOSE 3000:3001
 ENV PORT=3001
 
 # Creating Display
-ENV DISPLAY :99
+ENV DISPLAY=:99
 
 # Start script on Xvfb
 ENTRYPOINT ["./wrap.sh"]
