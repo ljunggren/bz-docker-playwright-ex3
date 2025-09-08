@@ -18965,6 +18965,107 @@ var _CtrlDriver={
 };
 _CtrlDriver._setupKeyInput();
 var $util={
+  keyCodeMap:{
+    8: "Backspace",
+    9: "Tab",
+    13: "Enter",
+    16: "Shift",
+    17: "Control",
+    18: "Alt",
+    19: "Pause",
+    20: "CapsLock",
+    27: "Escape",
+    32: "Space",
+    33: "PageUp",
+    34: "PageDown",
+    35: "End",
+    36: "Home",
+    37: "ArrowLeft",
+    38: "ArrowUp",
+    39: "ArrowRight",
+    40: "ArrowDown",
+    45: "Insert",
+    46: "Delete",
+    48: "0",
+    49: "1",
+    50: "2",
+    51: "3",
+    52: "4",
+    53: "5",
+    54: "6",
+    55: "7",
+    56: "8",
+    57: "9",
+    65: "a",
+    66: "b",
+    67: "c",
+    68: "d",
+    69: "e",
+    70: "f",
+    71: "g",
+    72: "h",
+    73: "i",
+    74: "j",
+    75: "k",
+    76: "l",
+    77: "m",
+    78: "n",
+    79: "o",
+    80: "p",
+    81: "q",
+    82: "r",
+    83: "s",
+    84: "t",
+    85: "u",
+    86: "v",
+    87: "w",
+    88: "x",
+    89: "y",
+    90: "z",
+    91: "MetaLeft",
+    92: "MetaRight",
+    93: "ContextMenu",
+    96: "Numpad0",
+    97: "Numpad1",
+    98: "Numpad2",
+    99: "Numpad3",
+    100: "Numpad4",
+    101: "Numpad5",
+    102: "Numpad6",
+    103: "Numpad7",
+    104: "Numpad8",
+    105: "Numpad9",
+    106: "NumpadMultiply",
+    107: "NumpadAdd",
+    109: "NumpadSubtract",
+    110: "NumpadDecimal",
+    111: "NumpadDivide",
+    112: "F1",
+    113: "F2",
+    114: "F3",
+    115: "F4",
+    116: "F5",
+    117: "F6",
+    118: "F7",
+    119: "F8",
+    120: "F9",
+    121: "F10",
+    122: "F11",
+    123: "F12",
+    144: "NumLock",
+    145: "ScrollLock",
+    186: ";",
+    187: "=",
+    188: ",",
+    189: "-",
+    190: ".",
+    191: "/",
+    192: "`",
+    219: "[",
+    220: "\\",
+    221: "]",
+    222: "'"
+  },
   extractData:function(d,k){
     return _extractData._extract(d,k)
   },
@@ -20374,95 +20475,37 @@ var $util={
       _fun&&_fun()
     }
   },
-  //triggerKeyEvent
   triggerKeyEvent:function(o,e,k,ch,c,a,s){
+    if(!bzComm._isApp()){
+      o=_Util._getQuickPath(o)
+      bzComm.postToApp({
+        fun:"triggerKeyEvent",
+        scope:"$util",
+        ps:[o,e,k,ch,c,a,s]
+      })
+      return
+    }else{
+
+      o=_Util._getElementByQuickPath(o)
+
+    }
     if(!o){
       return
     }
 
     $(o).focus()
-    o._bzKey=ch
-    o._bzKeyCode=k
-    if(ch&&o.maxLength&&o.maxLength>0&&o.maxLength<=(o.value+"").length){
-      return
-    }
-    if(!e.startsWith("key")){
-      e="key"+e;
-    }
-    if(e=="keypress"){
-      k=ch;
-    }
-    if(!o._bzSetKeyPress){
-      o._bzSetKeyPress=1;
-      
-      $(o).keydown(function(_event){
-        this._keydownDone=1
-        this._bCancel=_event.originalEvent.cancelBubble
-      });
-      $(o).keypress(function(_event){
-        this._keypressDone=1
-        if(!this._bCancel && !_event.originalEvent.isTrusted){
-          if(this._bzKey && (this.tagName=="TEXTAREA" || (this.tagName=="INPUT" && this._bzKey))){
-            this.value+=String.fromCharCode(this._bzKey);
-          }else if(this._bzKeyCode==13 && ["INPUT","SELECT"].includes(this.tagName)){
-            var f=_Util._getParentByTagName(this,"FORM")
-            if(f){
-              var o=$(f).find("input[type=submit]")[0]
-              if(o){
-                f.submit()
-              }else{
-                f.dispatchEvent(new Event("submit"));
-              }
-            }
-          }
-        }
-        this._bCancel=0
-      })
-    }
-    
-  //    if(!window.extensionContent){
-  //      var k = new KeyboardEvent(e, {bubbles:true});
-  //      Object.defineProperty(k, 'charCode', {get:function(){return e=="keypress"?ch:0;}});
-  //      Object.defineProperty(k, 'keyCode', {get:function(){return k;}});
-  //      Object.defineProperty(k, 'which', {get:function(){return k;}});
-  //      Object.defineProperty(k, 'key', {get:function(){return String.fromCharCode(ch);}});
-  //      Object.defineProperty(k, 'code', {get:function(){return 'Key'+String.fromCharCode(ch).toUpperCase();}});
-  //      Object.defineProperty(k, 'composed', {get:function(){return true;}});
-  //      k.charCodeVal = ch
-  //      o.dispatchEvent(k);
-  //    }else{
-    let _jsPath
 
-    o.focus()
-    if(document.activeElement!=o){
-      o.bzTmp=_cssHandler._findPath(o)
-      _Util._setFindDomJS(o)
-    //   _jsPath=o._jsPath
-    // }else{
-    //   _jsPath="document.activeElement"
-    }
-
-    // let _key=k==13?"Enter":k==9?"Tab":k==32?"Space":String.fromCharCode(ch),
-    //     _code=k==13?"Enter":k==9?"Tab":k==32?"Space":'Key'+String.fromCharCode("+ch+").toUpperCase()
-    // var s="(function(){const o="+_jsPath+";const k = new KeyboardEvent('"+e+"', {bubbles:true}); "
-    //      +"Object.defineProperty(k, 'charCode', {get:function(){return "+(e=="keypress"?ch:0)+";}});"
-    //      +"Object.defineProperty(k, 'keyCode', {get:function(){return "+k+";}});"
-    //      +"Object.defineProperty(k, 'which', {get:function(){return "+k+";}});"
-    //      +"Object.defineProperty(k, 'key', {get:function(){return '"+_key+"';}});"
-    //      +"Object.defineProperty(k, 'code', {get:function(){return '"+_code+"';}});"
-    //      +"Object.defineProperty(k, 'composed', {get:function(){return true;}});"
-    //      +"k.charCodeVal = "+(ch||0)+";"
-    //      +"o.dispatchEvent(k);})();"
-    // var d=o.ownerDocument.createElement("script");
-    // d.innerHTML=s;
-    // o.ownerDocument.body.parentNode.append(d);
-    // d.remove()
-    $util.triggerTabEvent(o)
-    setTimeout(()=>{
-      o._keydownDone=1
-    },10)
-  //    }
-    
+    let d={
+      key: $util.keyCodeMap[k],
+      keyCode: k,
+      code: 'Tab',
+      which: ch,
+      bubbles: true,
+      cancelable: true
+    };
+    // 创建并触发 keydown 事件
+    e = new KeyboardEvent(e, d);
+    o.dispatchEvent(e);
   },
   //o:element, e:event, b:button, x, y, c:ctrlKey, a:alt, s:shift, t:target,tr:dataTransfer
   //triggerMouseEvent
@@ -20816,26 +20859,10 @@ var $util={
     // o.dispatchEvent(e);
   },
   triggerTabEvent:function(o){
-    // 选择要触发事件的元素
-    let d={
-      key: 'Tab',
-      keyCode: 9,
-      code: 'Tab',
-      which: 9,
-      bubbles: true,
-      cancelable: true
-    };
-    // 创建并触发 keydown 事件
-    let e = new KeyboardEvent("keydown", d);
-    o.dispatchEvent(e);
+    $util.triggerKeyEvent(o,"keydown",9,0);
+    $util.triggerKeyEvent(o,"keypress",9,0);
+    $util.triggerKeyEvent(o,"keyup",9,0);
 
-    // 创建并触发 keypress 事件
-    e = new KeyboardEvent("keypress", d);
-    o.dispatchEvent(e);
-
-    // 创建并触发 keyup 事件
-    e = new KeyboardEvent("keyup", d);
-    o.dispatchEvent(e);
   },
   //triggerBlurEvent
   triggerBlurEvent:function(o,_fun){
@@ -31043,6 +31070,7 @@ var _domActionTask={
           }
           return;
         }
+
         d.event.value=v
         if(_Util._isDateValue(v)||(v.constructor==Array&&!v.find(x=>!_Util._isDateValue(x)))){
           if(d.e.tagName!="INPUT"||d.e.readOnly||v.constructor==Array){
