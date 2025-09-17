@@ -1139,6 +1139,7 @@ var _bzMessage={
     _validItems:"验证项目",
     _preSetActions:"赋值前动作",
     _preValidActions:"验证前动作",
+    _aftActionsOfValidation:"验证后动作",
     _validationActions:"验证动作",
     _cssContent:"指定元素 id, class, attributes ...",
     _pathOption:{

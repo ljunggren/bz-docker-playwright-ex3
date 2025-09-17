@@ -1830,6 +1830,7 @@ var _bzMessage={
     _validItems:"Validations",
     _preSetActions:"Pre-Steps of Set value",
     _preValidActions:"Pre-Steps of Validation",
+    _aftActionsOfValidation:"Final Steps of Validation",
     _validationActions:"Validation Actions",
     _cssContent:"Element id, class, attributes ...",
     _pathOption:{
