@@ -4328,6 +4328,8 @@ $test.data
     _timer:"Timer Setting",
     _skipLogin:"Ignore identify Authorization",
     _aiSetting:"AI Setting",
+    _stdSolution:"Standard Solution",
+    _realtimeSolution:"Realtime Solution",
     _validForm:"{0} form",
     _oprName:"{0} {1}",
     _startUrl:"Start URL",

@@ -5019,6 +5019,8 @@ $test.data
     _timer:"Timer Setting",
     _skipLogin:"Ignore identify Authorization",
     _aiSetting:"AI Setting",
+    _stdSolution:"Standard Solution",
+    _realtimeSolution:"Realtime Solution",
     _validForm:"{0} form",
     _oprName:"{0} {1}",
     _startUrl:"Start URL",
@@ -52346,63 +52348,23 @@ var _ideActionManagement={
       _text:"_bzMessage._common._solution",
       _jqext:{
         click:function(){
-          let a=this._data._item,
-              r=_IDE._data._curTest._result[a.i],
-              _realTargetTest,
-              _tmp={
-                $project:$project,
-                $module:window.$module,
-                _aiAPIDataMap:_aiAPI._dataMap
-              };
-
-          window.$project={}
-          window.$module={}
-          _aiAPI._dataMap={}
-
-          let _tmpTargetTest=_ideObjHandler._getDataByPath($aiAPI.getExeSolutionByParameter({}))
-          if(r&&r._data){
-            _realTargetTest=_ideObjHandler._getDataByPath(r._tmpRefTest)
-            if(_realTargetTest){
-              let as=[..._realTargetTest._data.actions]
-              if(as.length==1&&as[0].type==3){
-                _tmpTargetTest=_realTargetTest
-                as[0]._realAction=a
-              }else{
-                _tmpTargetTest._data.actions.forEach((x,i)=>{
-                  as.find((a,i)=>{
-                    if(a.refOfSuccess==x.refOfSuccess){
-                      x._realAction=a
-                      as.splice(i,1)
-                      return 1
-                    }
-                  })
-                })
-              }
-            }
-          }
-
-          window.$project=_tmp.$project
-          window.$module=_tmp.$module
-          _aiAPI._dataMap=_tmp._aiAPIDataMap
-
+          let _solution=_getRealtimeSolution(this._data._item)
           _Util._confirmMessage({
             _tag:"div",
             _items:[
               {
                 _tag:"div",
                 _attr:{
-                  class:"bz-row",
-                  style:function(d){
-                    if(d._item._realAction){
-                      return "color:var(--active-color) !important";
-                    }
-                  }
+                  class:"bz-row"
                 },
                 _items:[
                   {
                     _tag:"span",
                     _attr:{
-                      class:"bz-right-space-5"
+                      class:"bz-right-space-5",
+                      style:function(d){
+                        return "text-indent:"+d._item._level*20+"px;"
+                      }
                     },
                     _text:"_data._idx+1+'. '",
                   },
@@ -52425,36 +52387,35 @@ var _ideActionManagement={
                           style:"flex:1;width:0;",
                           class:"bz-nowrap"
                         },
-                        _text:"_ideObjHandler._getObjStdDesc(_data._item)"
+                        _text:"_data._item._name"
                       },
                       {
-                        _if:function(_data){
-                          return _realTargetTest&&(_realTargetTest._result||[])[_data._item._realAction.i]
+                        _if:function(d){
+                          return d._item._result!==undefined
                         },
                         _tag:"span",
                         _attr:{
                           class:function(d){
-                            return "bz-right-space-5 bz-"+_ideTask._getResultIconByType(_realTargetTest._result[d._item._realAction.i]._type)
+                            return "bz-right-space-5 bz-"+_ideTask._getResultIconByType(d._item._result)
                           }
                         }
                       },
                       {
-                        _if:function(_data){
-                          return _realTargetTest&&(_realTargetTest._result||[])[_data._item._realAction.i]
+                        _if:function(d){
+                          return d._item._result!==undefined
                         },
                         _tag:"span",
                         _attr:{
                           class:"bz-parameter",
                           title:function(d){
-                            return JSON.stringify(_realTargetTest._result[d._item._realAction.i]._data.successParameter,0,2)
+                            return JSON.stringify(d._item.successParameter,0,2)
                           }
                         }
                       }
                     ],
                     _jqext:{
                       click:function(){
-                        let a=this._data._item
-                        BZ._setHash(a.refOfSuccess)
+                        BZ._setHash(this._data._item._key)
                       }
                     }
                   }
@@ -52462,9 +52423,86 @@ var _ideActionManagement={
               }
             ],
             _dataRepeat:function(){
-              return _tmpTargetTest._data.actions
+              return _solution._data
             }
-          },[],_bzMessage._common._solution,0,0,0,1)
+          },[],_solution._title,0,0,0,1)
+
+          function _getRealtimeSolution(a){
+            debugger
+            var _list=0,_last=0;
+            (_ideReport._curDetails||[]).find(x=>{
+                if(_list){
+                  if(_list.length&&!x._key&&!_list.find(z=>x._path.includes(z._key))){
+                    return 1
+                  }else if(x._key){
+                    _list.push({
+                      _result:x._type,
+                      _name:`[${x._key}] ${x.name}`,
+                      successParameter:_last._data.successParameter,
+                      _key:"/"+x._key.replace(".","/")+"/",
+                      _level:_list.findIndex(x=>_last._path.includes(x._key))+1
+                    })
+                  }
+                }else if(x._path.endsWith("m74/t2/1")){
+                  _list=[]
+                }
+                if(!x._key){
+                  _last=x
+                }
+            })
+
+            return {
+              _title:_list?_bzMessage._aiDefinition._realtimeSolution:_bzMessage._aiDefinition._stdSolution,
+              _data:_list||_getTmpSolution(a)
+            }
+          }
+
+          function _getTmpSolution(a){
+            let r=_IDE._data._curTest._result[a.i],
+                _realTargetTest,
+                _tmp={
+                  $project:$project,
+                  $module:window.$module,
+                  _aiAPIDataMap:_aiAPI._dataMap
+                };
+
+            window.$project={}
+            window.$module={}
+            _aiAPI._dataMap={}
+
+            let _tmpTargetTest=_ideObjHandler._getDataByPath($aiAPI.getExeSolutionByParameter({}))
+            if(r&&r._data){
+              _realTargetTest=_ideObjHandler._getDataByPath(r._tmpRefTest)
+              if(_realTargetTest){
+                let as=[..._realTargetTest._data.actions]
+                if(as.length==1&&as[0].type==3){
+                  _tmpTargetTest=_realTargetTest
+                  as[0]._realAction=a
+                }else{
+                  _tmpTargetTest._data.actions.forEach((x,i)=>{
+                    as.find((a,i)=>{
+                      if(a.refOfSuccess==x.refOfSuccess){
+                        x._realAction=a
+                        as.splice(i,1)
+                        return 1
+                      }
+                    })
+                  })
+                }
+              }
+            }
+
+            window.$project=_tmp.$project
+            window.$module=_tmp.$module
+            _aiAPI._dataMap=_tmp._aiAPIDataMap
+            return _tmpTargetTest._data.actions.map(x=>{
+              return {
+                _key:x.refOfSuccess,
+                _name:_ideObjHandler._getObjStdDesc(x.refOfSuccess),
+                _level:0
+              }
+            })
+          }
         }
       }
     }
