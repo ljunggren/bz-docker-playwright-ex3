@@ -44796,7 +44796,8 @@ var _bzDomPicker={
 
     if(bzComm._isIDE()){
       _bzDomPicker._removeTmpCover();
-      setTimeout(function(){
+      clearTimeout(_bzDomPicker._flashTimer)
+      _bzDomPicker._flashTimer=setTimeout(function(){
         if(d.constructor==Object){
           if(_ideActionManagement._isInBZComponent(d)){
             return
