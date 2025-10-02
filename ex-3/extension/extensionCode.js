@@ -52429,8 +52429,7 @@ var _ideActionManagement={
           },[],_solution._title,0,0,0,1)
 
           function _getRealtimeSolution(a){
-            debugger
-            var _list=0,_last=0;
+            var _list=0,_last=0,_curPath=_ideObjHandler._getItemPath(a);
             (_ideReport._curDetails||[]).find(x=>{
                 if(_list){
                   if(_list.length&&!x._key&&!_list.find(z=>x._path.includes(z._key))){
@@ -52444,7 +52443,7 @@ var _ideActionManagement={
                       _level:_list.findIndex(x=>_last._path.includes(x._key))+1
                     })
                   }
-                }else if(x._path.endsWith("m74/t2/1")){
+                }else if(x._path.endsWith(_curPath)){
                   _list=[]
                 }
                 if(!x._key){
