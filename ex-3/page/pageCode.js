@@ -12170,7 +12170,7 @@ var $util={
       })
       return
     }else{
-
+debugger
       o=_Util._getElementByQuickPath(o)
 
     }
@@ -12183,10 +12183,11 @@ var $util={
     let d={
       key: $util.keyCodeMap[k],
       keyCode: k,
-      code: 'Tab',
+      code: $util.keyCodeMap[k],
       which: ch,
       bubbles: true,
-      cancelable: true
+      cancelable: true,
+      view: window
     };
     // 创建并触发 keydown 事件
     e = new KeyboardEvent(e, d);
@@ -12414,13 +12415,9 @@ var $util={
           $util.triggerEnterEvent(o);
           _doFinal()
         }else if(_withSubmit){
-          let _form=_Util._getParentElementByCss("form",o)
-          if(_form){
+          $util.triggerSubmitEvent(o,0,()=>{
             _doFinal()
-            _form.submit()
-            return
-          }
-          _doFinal()
+          });
         }else if(!_noAutoSelect){
           return _autoClickMenuAfterSetValue(v,o,_doFinal)
         }else{
@@ -12513,6 +12510,40 @@ var $util={
         v=v.split("=").map(x=>x.trim())
         $(o).attr(v[0],v[1]||"")
       }
+    }
+  },
+  triggerSubmitEvent:function(_submitter,_form,_fun){
+    if(!bzComm._isApp()){
+      if(!_form){
+        _form=_Util._getParentElementByCss("form",_submitter)
+        if(!_form){
+          _fun&&_fun()
+        }
+      }
+      _form=_Util._getQuickPath(_form)
+      if(_submitter){
+        _submitter=_Util._getQuickPath(_submitter)
+      }
+      bzComm.postToApp({
+        fun:"triggerSubmitEvent",
+        scope:"$util",
+        ps:[_submitter,_form],
+        insertCallFun:1,
+        return:_fun
+      })
+    }else{
+      if(_submitter){
+        _submitter=_Util._getElementByQuickPath(_submitter)
+      }
+      _form=_Util._getElementByQuickPath(_form)
+      if(_form){
+        _form.dispatchEvent(new SubmitEvent('submit', {
+          bubbles: true,
+          cancelable: true,
+          submitter:_submitter
+        }));
+      }
+      _fun&&_fun()
     }
   },
   triggerEnterEvent:function(o){

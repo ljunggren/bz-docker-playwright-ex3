@@ -1227,7 +1227,7 @@ var _bzMessage={
     _confirmClear:"Do you want to clear all items from the selected panel?",
     _confirmDeleteButton:"The {0} button is empty now, do you want to delete it?",
     _deleteFlowFromList:"Please select the process from which the '{0}' status needs to be removed",
-    _updateRefData:"Found below modules using the data. Do you want to update all of them \n\n(from {0} to {1})?",
+    _updateRefData:"Do you want to update module alias to {0} as well?",
     _stdStatus:{
       start:"Start",
       created:"Create",

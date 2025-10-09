@@ -1227,7 +1227,7 @@ var _bzMessage={
     _confirmClear:"是否将选择的面板中所有项目都清除？",
     _confirmDeleteButton:"{0}按钮设置为空，是否需要将其删除？",
     _deleteFlowFromList:"请选择需要从哪些流程中删除'{0}'状态",
-    _updateRefData:"以下模块中使用了此数据。是否全部更新？\n\n(从 {0} 到 {1})",
+    _updateRefData:"是否同时修改模块的别名为 {0} ？",
     _stdStatus:{
       start:"开始",
       created:"Create",
