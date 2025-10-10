@@ -1864,7 +1864,15 @@ debugger
   triggerSubmitEvent:function(_submitter,_form,_fun){
     if(!bzComm._isApp()){
       if(!_form){
-        _form=_Util._getParentElementByCss("form",_submitter)
+        if(_submitter.attributes.form){
+          _form=(_submitter.attributes.form.value||"").trim()
+          if(_form){
+            _form=$("#"+_form)[0]
+          }
+        }
+        if(!_form){
+          _form=_Util._getParentElementByCss("form",_submitter)
+        }
         if(!_form){
           _fun&&_fun()
         }
