@@ -16,6 +16,13 @@ class BZTab{
           }
         })
       }else if(!_inBuilding){
+        if(t.url=='about:blank'){
+          _setWindowId(t.tabId,(v)=>{
+            _tabManagement._getIdeList().forEach(o=>{
+              bgComm.postMessageToIDE(o.id,{eval:"BZ.setPopWin("+v+")"})
+            })
+          })
+        }
         return
       }
     }
@@ -23,12 +30,16 @@ class BZTab{
 
     this.id=t.tabId||t.id
     this.windowId=t.windowId
-    let o=this
-    if(!t.windowId){
+    let o=this;
+    _setWindowId(o.id,(v)=>{
+      o.windowId=v
+    })
+
+    function _setWindowId(v,fun){
       chrome.tabs.query({}, (tabs) => {
         tabs.find(x=>{
-          if(x.id==o.id){
-            o.windowId=x.windowId
+          if(x.id==v){
+            fun(x.windowId)
             return 1
           }
         })
@@ -252,7 +263,6 @@ const _tabManagement={
       if(v){
         Object.values(_tabManagement._map).forEach(x=>{
           if(a!=x&&x.url&&x.url.includes(v[0])){
-            debugger
             bgComm.postToTab({
               toPage:"bzIde",
               toId:x.id,
@@ -522,6 +532,9 @@ const _tabManagement={
       return o.id
     }
 
+  },
+  _getIdeList:function(){
+    return Object.values(_tabManagement._map).filter(x=>x.ide)
   }
 }
 _tabManagement.init()

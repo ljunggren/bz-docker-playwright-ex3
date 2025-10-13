@@ -7711,6 +7711,13 @@ window.BZ={
       BZ._setSharedData({"BZ._data._status":d})
     }
   },
+  setPopWin:function(v){
+    setTimeout(()=>{
+      if(BZ._curPopWin&&!BZ._curPopWin.windowId){
+        BZ._curPopWin.windowId=v
+      }
+    },100)
+  },
   focusMaster:function(){
     if(bzComm._isIDE()){
       window.focus()
@@ -12491,7 +12498,7 @@ window._Util={
     })
     _dialog=d._showMe(_content[0],_dialog,_body,_winTagClass);
     _content.css({opacity:1,position:"unset"})
-    //_Util._resizeModelWindow(_dialog,_body.ownerDocument)
+
     _waitExe()
     _chkSize()
     function _waitExe(i){
@@ -12557,12 +12564,12 @@ window._Util={
   _resizeModelWindow:function(o,_doc,_fun){
     clearTimeout(_Util._resizeWindowTimer)
     _Util._resizeWindowTimer=setTimeout(function(){
-      _doc=_doc||window.document
+      _doc=_doc||(o?o.ownerDocument:window.document)
       let os=$(_doc).find(".bz-modal-window").toArray()
       if(o){
         o=os.find(oi=>{
           return oi==o|| $(oi).find(o).length
-        })
+        })||os._last()
         _doIt(o)
       }else if(os.length){
         _doIt(os.pop())
@@ -12822,7 +12829,7 @@ window._Util={
     }
 
     
-
+    d.write("<!DOCTYPE html>")
     //Setup css
     if(_Util._style){
       d.write("<style>"+_Util._style+"</style>")
@@ -12874,7 +12881,7 @@ window._Util={
         window.document.body.click()
       }
       w.onbeforeunload=function(){
-        _bzJSEditor._addResizeObserver()
+        window._bzJSEditor&&_bzJSEditor._addResizeObserver()
       }
       w.onresize();
     },10)
@@ -15937,7 +15944,11 @@ window.bzComm={
   },  
   _focusIDE:function(){
     if(bzComm._isIDE()||bzComm._isIDEExtension()){
-      bzComm.postToBackground({fun:"focusTab",scope:"bgUtil"})
+      if(_aiPageHandler._curPopWin&&!_aiPageHandler._curPopWin.closed){
+        bzComm.postToBackground({fun:"focusWinById",scope:"bgUtil",ps:[_aiPageHandler._curPopWin.windowId]})
+      }else{
+        bzComm.postToBackground({fun:"focusTab",scope:"bgUtil"})
+      }
     }else{
       bzComm.postToIDE({fun:"_focusIDE",scope:"bzComm"})
     }
@@ -16235,6 +16246,9 @@ window.bzComm={
       delete rv.fromId;
       delete rv.fromIFrameId
       bzComm._postMessage(rv)
+      setTimeout(()=>{
+        bzComm._focusIDE()
+      },100)
     }
   },
   _handleResult:function(v){
@@ -18951,7 +18965,7 @@ var _CtrlDriver={
               return _resize()
             }
             $(ro).css({height:`calc(100% - ${r.top+_offset}px)`})
-          })
+          },50)
         }
       },
       _attr:{
@@ -20488,7 +20502,6 @@ var $util={
       })
       return
     }else{
-debugger
       o=_Util._getElementByQuickPath(o)
 
     }
@@ -35493,7 +35506,7 @@ var _cssHandler={
     }
     for(var i=1;i<p.length;i++){
       var v=p[i]
-      if(v[0]!="{"){
+      if(v[0]!="{"&&_cssHandler._nameMap[v]){
         cp.push({_type:"element",_value:v,_css:_cssHandler._nameMap[v]._css});
       }else{
         v=v.substring(1,v.length-1)
@@ -39473,9 +39486,6 @@ class $$group extends $$action{
   static jsonToObject(d){
     let as=d.actions.map(a=>{
       let b=$$action.jsonToObject(a)
-      if(!b){
-        debugger
-      }
       return b
     }),
         c=d.conditionAction?$$action.jsonToObject(d.conditionAction):null
@@ -40696,7 +40706,6 @@ var formatter={
           if(v&&!k){
             o=o.parent().text().match(/worker-([0-9]+)/)
             if(o){
-              debugger
               k=o[1]
             }
           }
@@ -41830,7 +41839,7 @@ var formatter={
           }
         })
         as[as.length-1].time=formatter.getSpendTime(as[as.length-1].start,endTime,"actionTime")
-        debugger
+
         let r=as.map(a=>formatter.getGroupElement(a)).join("")
         as.forEach(a=>{
           delete a.details
@@ -44084,14 +44093,17 @@ var _bzDomPicker={
     if(d._dom.tagName=="SELECT"){
       return
     }
-    let os=d._dom.children;
+    let os=d._dom.children,i=0;
     if(os&&d==_bzDomPicker._data._focusItem){
       for(let o of os){
         if(_bzDomPicker._data._items.find(x=>o==x._dom)){
           return
         }
+        if(!$(o).hasClass("BZIgnore")){
+          i++
+        }
       }
-      return os.length
+      return i
     }
 
   },
@@ -44392,7 +44404,6 @@ var _bzDomPicker={
       if(!this._curRequire.e){
         _bzDomPicker._curRequire._back(_path,_pos,o);
         _bzDomPicker._endRequire();
-        bzComm._focusIDE();
         return 1
       }
 
@@ -44943,6 +44954,7 @@ var _bzDomPicker={
     this._removeTmpCover();
     var _path=this._getFinalPaths();
     _bzDomPicker._curDom=$util.findDom(_path);
+    
     _bzDomPicker._curRequire._back(_path,this._data._pos,_bzDomPicker._curDom);
     _bzDomPicker._endRequire();
     e.target.ownerDocument.defaultView.close()
@@ -45162,11 +45174,14 @@ var _bzDomPicker={
         //switcher
         {
           _if:function(d){
-            return _button&&_bzDomPicker._hasChild(d._item)
+            if(_button&&_bzDomPicker._hasChild(d._item)){
+              return 1
+            }
+            d._item._showChildren=0
           },
           _tag:"button",
           _attr:{
-            class:"btn bz-small-btn bz-font9 bz-plus",
+            class:"'btn bz-small-btn bz-font9 '+(_data._item._showChildren?'bz-minus':'bz-plus')",
             style:"background: transparent;line-height:0;"
           },
           // _text:function(d){
@@ -45453,7 +45468,7 @@ var _pickerTemplate={
                       },
                       _tag:"div",
                       _attr:{
-                        style:"margin-left:20px;margin-top: 5px;color:#999;"
+                        style:"margin-left:30px;margin-top: 5px;color:#999;"
                       },
                       _items:[
                         _bzDomPicker._getItemView(0,function(d){
@@ -45461,13 +45476,15 @@ var _pickerTemplate={
                             let os=_CtrlDriver._buildProxy([])
                             d._item._children=os
                             for(let o of d._item._dom.children){
-                              os.push({
-                                _dom:o,
-                                _value:"",
-                                _showChildren:false,
-                                _selected:false,
-                                _children:[]
-                              })
+                              if(!$(o).hasClass("BZCover")){
+                                os.push({
+                                  _dom:o,
+                                  _value:"",
+                                  _showChildren:false,
+                                  _selected:false,
+                                  _children:[]
+                                })
+                              }
                             }
                             if(os.length==1){
                               let oo=_bzDomPicker._data._items.filter(x=>x._selected)._last()
@@ -45663,19 +45680,6 @@ var _pickerTemplate={
                           ]
                         }
                       ]
-                    },
-                    {
-                      _if:"_bzDomPicker._data._items.includes(_bzDomPicker._data._focusItem)",
-                      _tag:"button",
-                      _attr:{
-                        class:"btn btn-none btn-icon bz-cross bz-small-btn pull-right",
-                        style:"margin-top:-15px;"
-                      },
-                      _jqext:{
-                        click:function(){
-                          _bzDomPicker._data._items.splice(_bzDomPicker._data._items.indexOf(_bzDomPicker._data._focusItem))
-                        }
-                      }
                     }
                   ]
                 },
@@ -49819,7 +49823,6 @@ var _ideActionManagement={
   },
   //_switchToSetValue
   _mergeToSetAction:function(d){
-    debugger
     if(BZ._isRecording()&&_ideRecorder._exFun){
       return _ideRecorder._exFun(d)
     }
@@ -51124,15 +51127,17 @@ var _ideActionManagement={
     }
     return p;
   },
-  _setAdvancedOptions:function(){
-    let a=_IDE._data._curAction,
-    _advOptions=[]
-    if(_ideActionManagement._hasElement(a)){
+  _setAdvancedOptions:function(_vPath,_uiFrom){
+    let a=eval(_vPath)
+    let _advOptions=[]
+    if(_ideActionManagement._hasElement(a)||a.path){
       _advOptions=["_skipMark","_failMark"]
-      if(a.type==1&&a.event.type=='change'){
-        // _advOptions.push("_auxiliaryRecognition")
-      }else if(a.type==1&&a.event.type=='mouse'){
-        _advOptions.push("_offset")
+      if(a.event){
+        if(a.event.type=='change'){
+          // _advOptions.push("_auxiliaryRecognition")
+        }else if(a.event.type=='mouse'){
+          _advOptions.push("_offset")
+        }
       }
     }
     _advOptions.push("_monitorUrl")
@@ -51152,7 +51157,6 @@ var _ideActionManagement={
       }
     })||_advOptions[0]
 
-
     _Util._confirmMessage({
       _tag:"div",
       _update:function(){
@@ -51171,7 +51175,7 @@ var _ideActionManagement={
             {
               _tag:"div",
               _attr:{
-                "class":function(d){
+                class:function(d){
                   let c="bz-h-h-tab-item "+(d._item==BZ._data._uiSwitch._actionAdvTab?'white-active':'')
                   if(d._item=="_skipMark"&&a.skipActionElement){
                   }else if(d._item=="_failMark"&&a.failElement){
@@ -51183,7 +51187,8 @@ var _ideActionManagement={
                     return c
                   }
                   return c+" bz-tab-point-blue"
-                }
+                },
+                style:"padding:0 8px;"
               },
               _text:"_bzMessage._action[_data._item]",
               _dataRepeat:function(){
@@ -51192,7 +51197,7 @@ var _ideActionManagement={
               _jqext:{
                 click:function(){
                   BZ._data._uiSwitch._actionAdvTab=this._data._item
-                  _Util._resizeModelWindow()
+                  _Util._resizeModelWindow(this)
                 }
               }
             }
@@ -51211,11 +51216,12 @@ var _ideActionManagement={
               _tag:"div",
               _items:function(){
                 return [
-                  _uiHandler._getElementPath("_IDE._data._curAction.skipActionElement",function(){
-                    _bzDomPicker._pickElement(_IDE._data._curAction.skipActionElement,function(v){
-                      _IDE._data._curAction.skipActionElement=v.p
-                      _ideTestManagement._save()
-                      _Util._resizeModelWindow()
+                  _uiHandler._getElementPath(_vPath+".skipActionElement",function(){
+                    _bzDomPicker._pickElement(a.skipActionElement,function(v){
+                      a.skipActionElement=v.p
+                      _ideTestManagement._save(0,0,function(){
+                        _Util._resizeModelWindow(_uiFrom)
+                      })
                     })
                   },_bzMessage._action._skipActionElement,0,0,0,0,0,0,function(){
                   return !BZ._isCheckout(0,1)
@@ -51227,11 +51233,12 @@ var _ideActionManagement={
             {
               _if:"BZ._data._uiSwitch._actionAdvTab=='_failMark'",
               _tag:"div",
-              _items:[_uiHandler._getElementPath("_IDE._data._curAction.failElement",function(){
-                _bzDomPicker._pickElement(_IDE._data._curAction.failElement,function(v){
-                  _IDE._data._curAction.failElement=v.p
-                  _ideTestManagement._save()
-                  _Util._resizeModelWindow()
+              _items:[_uiHandler._getElementPath(_vPath+".failElement",function(){
+                _bzDomPicker._pickElement(a.failElement,function(v){
+                  a.failElement=v.p
+                  _ideTestManagement._save(0,0,function(){
+                    _Util._resizeModelWindow(_uiFrom)
+                  })
                 })
               },_bzMessage._action._failElement,0,0,0,0,0,0,function(){
                   return !BZ._isCheckout(0,1)
@@ -51247,7 +51254,7 @@ var _ideActionManagement={
             //   _items:function(){
             //     return [
             //       _bzJSEditor._buildJSEditor({
-            //         _model:"_IDE._data._curAction.finalElement",
+            //         _model:_vPath+".finalElement",
             //         _style:"height:100%;",
             //         _noBtn:1,
             //         _label:"",
@@ -51260,9 +51267,6 @@ var _ideActionManagement={
             {
               _if:"BZ._data._uiSwitch._actionAdvTab=='_offset'",
               _tag:"div",
-              _attr:{
-                style:"margin-top:10px;"
-              },
               _items:[
                 //Offset on element
                 {
@@ -51272,12 +51276,11 @@ var _ideActionManagement={
                       _tag:"input",
                       _attr:{
                         type:"checkbox",
-                        checked:"_IDE._data._curAction.offset",
+                        checked:_vPath+".offset",
                         disabled:"!BZ._isCheckout(0,1)"
                       },
                       _jqext:{
                         click:function(){
-                          let a=_IDE._data._curAction
                           if(this.checked){
                             if(!a.offset){
                               a.offset={X:0,Y:0,origin:"mc"}
@@ -51286,8 +51289,9 @@ var _ideActionManagement={
                             a.offset=0
                             delete a.offset
                           }
-                          _ideTestManagement._save()
-                          _Util._resizeModelWindow()
+                          _ideTestManagement._save(0,0,function(){
+                            _Util._resizeModelWindow(_uiFrom)
+                          })
                         }
                       }
                     },
@@ -51297,7 +51301,7 @@ var _ideActionManagement={
                   ]
                 },
                 {
-                  _if:"_IDE._data._curAction.offset",
+                  _if:_vPath+".offset",
                   _tag:"div",
                   _attr:{
                     "class":"col-xs-12",
@@ -51323,7 +51327,7 @@ var _ideActionManagement={
                           _attr:{
                             "class":"form-control"
                           },
-                          _dataModel:"_IDE._data._curAction.offset.origin",
+                          _dataModel:_vPath+".offset.origin",
                           _items:[
                             {
                               _tag:"option",
@@ -51339,7 +51343,7 @@ var _ideActionManagement={
                               $(this).focus()
                             },
                             focus:function(){
-                              _bzDomPicker._showOffset(_IDE._data._curAction);
+                              _bzDomPicker._showOffset(a)
                             }
                           }
                         }
@@ -51366,14 +51370,14 @@ var _ideActionManagement={
                             type:"number",
                             "class":"form-control"
                           },
-                          _dataModel:"_IDE._data._curAction.offset[_data._item]",
+                          _dataModel:_vPath+".offset[_data._item]",
                           _jqext:{
                             change:function(){
                               $(this).focus()
                             },
                             focus:function(){
-                              _IDE._data._curAction.offset[this._data._item]=this.value
-                              _bzDomPicker._showOffset(_IDE._data._curAction);
+                              a.offset[this._data._item]=this.value
+                              _bzDomPicker._showOffset(a);
                             }
                           }
                         }
@@ -51393,19 +51397,19 @@ var _ideActionManagement={
               _items:[
                 //Offset on target element
                 {
-                  _if:"_IDE._data._curAction.event.element",
+                  _if:_vPath+".event.element",
                   _tag:"label",
                   _items:[
                     {
                       _tag:"input",
                       _attr:{
                         type:"checkbox",
-                        checked:"_IDE._data._curAction.event.offset",
+                        checked:_vPath+".event.offset",
                         disabled:"!BZ._isCheckout(0,1)"
                       },
                       _jqext:{
                         click:function(){
-                          let a=_IDE._data._curAction.event
+                          let a=a.event
                           if(this.checked){
                             if(!a.offset){
                               a.offset={X:0,Y:0,origin:"mc"}
@@ -51425,7 +51429,7 @@ var _ideActionManagement={
                   ]
                 },
                 {
-                  _if:"_IDE._data._curAction.event.offset",
+                  _if:_vPath+".event.offset",
                   _tag:"div",
                   _attr:{
                     "class":"col-xs-12",
@@ -51451,7 +51455,7 @@ var _ideActionManagement={
                           _attr:{
                             "class":"form-control"
                           },
-                          _dataModel:"_IDE._data._curAction.event.offset.origin",
+                          _dataModel:_vPath+".event.offset.origin",
                           _items:[
                             {
                               _tag:"option",
@@ -51467,7 +51471,7 @@ var _ideActionManagement={
                               $(this).focus()
                             },
                             focus:function(){
-                              _bzDomPicker._showOffset(_IDE._data._curAction.event);
+                              _bzDomPicker._showOffset(a.event);
                             }
                           }
                         }
@@ -51494,14 +51498,14 @@ var _ideActionManagement={
                             type:"number",
                             "class":"form-control"
                           },
-                          _dataModel:"_IDE._data._curAction.event.offset[_data._item]",
+                          _dataModel:_vPath+".event.offset[_data._item]",
                           _jqext:{
                             change:function(){
                               $(this).focus()
                             },
                             focus:function(){
-                              _IDE._data._curAction.event.offset[this._data._item]=this.value
-                              _bzDomPicker._showOffset(_IDE._data._curAction.event);
+                              a.event.offset[this._data._item]=this.value
+                              _bzDomPicker._showOffset(a.event);
                             }
                           }
                         }
@@ -51519,9 +51523,6 @@ var _ideActionManagement={
               _items:[
                 {
                   _tag:"div",
-                  _attr:{
-                    style:"padding:5px;"
-                  },
                   _items:[
                     {
                       _tag:"label",
@@ -51530,12 +51531,11 @@ var _ideActionManagement={
                           _tag:"input",
                           _attr:{
                             type:"checkbox",
-                            checked:"_IDE._data._curAction.monitorUrl",
+                            checked:_vPath+".monitorUrl",
                             disabled:"!BZ._isCheckout(0,1)"
                           },
                           _jqext:{
                             click:function(){
-                              let a=_IDE._data._curAction
                               if(a.monitorUrl){
                                 a.monitorUrl=""
                               }else{
@@ -51555,7 +51555,7 @@ var _ideActionManagement={
                   ]
                 },
                 {
-                  _if:"_IDE._data._curAction.monitorUrl",
+                  _if:_vPath+".monitorUrl",
                   _tag:"div",
                   _attr:{
                     style:"height:200px;"
@@ -51563,7 +51563,7 @@ var _ideActionManagement={
                   _items:function(){
                     return [
                       _bzJSEditor._buildJSEditor({
-                        _model:"_IDE._data._curAction.monitorUrl",
+                        _model:_vPath+".monitorUrl",
                         _style:"height:100%;",
                         _noBtn:1,
                         _label:"",
@@ -51613,10 +51613,7 @@ var _ideActionManagement={
           ]
         }
       ]
-    },[],_bzMessage._common._advanced,600)
-    setTimeout(()=>{
-      _Util._resizeModelWindow()
-    },100)
+    },[],_bzMessage._common._advanced,600);
   },
   _hasOption:function(a){
     let e=a.event

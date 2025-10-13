@@ -4559,7 +4559,7 @@ window._Util={
     })
     _dialog=d._showMe(_content[0],_dialog,_body,_winTagClass);
     _content.css({opacity:1,position:"unset"})
-    //_Util._resizeModelWindow(_dialog,_body.ownerDocument)
+
     _waitExe()
     _chkSize()
     function _waitExe(i){
@@ -4625,12 +4625,12 @@ window._Util={
   _resizeModelWindow:function(o,_doc,_fun){
     clearTimeout(_Util._resizeWindowTimer)
     _Util._resizeWindowTimer=setTimeout(function(){
-      _doc=_doc||window.document
+      _doc=_doc||(o?o.ownerDocument:window.document)
       let os=$(_doc).find(".bz-modal-window").toArray()
       if(o){
         o=os.find(oi=>{
           return oi==o|| $(oi).find(o).length
-        })
+        })||os._last()
         _doIt(o)
       }else if(os.length){
         _doIt(os.pop())
@@ -4890,7 +4890,7 @@ window._Util={
     }
 
     
-
+    d.write("<!DOCTYPE html>")
     //Setup css
     if(_Util._style){
       d.write("<style>"+_Util._style+"</style>")
@@ -4942,7 +4942,7 @@ window._Util={
         window.document.body.click()
       }
       w.onbeforeunload=function(){
-        _bzJSEditor._addResizeObserver()
+        window._bzJSEditor&&_bzJSEditor._addResizeObserver()
       }
       w.onresize();
     },10)
@@ -7852,6 +7852,13 @@ window.BZ={
       BZ._setSharedData({"BZ._data._status":d})
     }
   },
+  setPopWin:function(v){
+    setTimeout(()=>{
+      if(BZ._curPopWin&&!BZ._curPopWin.windowId){
+        BZ._curPopWin.windowId=v
+      }
+    },100)
+  },
   focusMaster:function(){
     if(bzComm._isIDE()){
       window.focus()
@@ -8350,7 +8357,11 @@ window.bzComm={
   },  
   _focusIDE:function(){
     if(bzComm._isIDE()||bzComm._isIDEExtension()){
-      bzComm.postToBackground({fun:"focusTab",scope:"bgUtil"})
+      if(_aiPageHandler._curPopWin&&!_aiPageHandler._curPopWin.closed){
+        bzComm.postToBackground({fun:"focusWinById",scope:"bgUtil",ps:[_aiPageHandler._curPopWin.windowId]})
+      }else{
+        bzComm.postToBackground({fun:"focusTab",scope:"bgUtil"})
+      }
     }else{
       bzComm.postToIDE({fun:"_focusIDE",scope:"bzComm"})
     }
@@ -8648,6 +8659,9 @@ window.bzComm={
       delete rv.fromId;
       delete rv.fromIFrameId
       bzComm._postMessage(rv)
+      setTimeout(()=>{
+        bzComm._focusIDE()
+      },100)
     }
   },
   _handleResult:function(v){
@@ -12170,7 +12184,6 @@ var $util={
       })
       return
     }else{
-debugger
       o=_Util._getElementByQuickPath(o)
 
     }

@@ -974,6 +974,11 @@ input[type="checkbox"]:checked:before{
   color: var(--text-color) !important;
   left: 1.5px;
 }
+.bz-pop-win{
+  input[type="checkbox"]:checked:before{
+    top: -2px;
+  }
+}
 input[type="checkbox"]:checked{
   border-color:var(--text-color) !important;
 }
@@ -984,9 +989,7 @@ input[type="checkbox"][disabled]:checked::before{
   color:var(--disable-text-color) !important;
   border-color:var(--disable-text-color) !important;
 }
-.bz-pop-win input[type="checkbox"]:checked:before{
-  top:1px;
-}
+
 input[type="radio"]:checked:before{
   color:var(--text-color) !important;
   content:"\ea54";
@@ -3753,15 +3756,6 @@ li.bz-ilock:before{
   display: inline-block;
 }
 
-.bz-pop-win .bz-console-filter{
-  background-color:var(--background-color) !important;
-}
-
-.bz-pop-win .bz-console-filter span,
-.bz-pop-win .bz-console-filter button,
-.bz-pop-win .bz-console-filter label{
-  margin-top:9px !important;
-}
 
 .bz-console-filter *{
   text-overflow:ellipsis;
@@ -3839,8 +3833,8 @@ textarea,input[type="text"],input[type="password"],input[type="number"]{
 }
 .dom-picker{
   position:absolute;
-  left: 20px;
-  right:20px;
+  left: 10px;
+  right:10px;
   top:12px;
   bottom:12px;
   overflow:hidden;
@@ -7783,9 +7777,6 @@ div.bz-middle-table{
 }
 
 .bz-std-tabs .bz-h-h-tab-item{
-  padding:0px 8px;
-}
-.bz-pop-win .bz-std-tabs .bz-h-h-tab-item{
   padding:5px 8px;
 }
 
@@ -11260,16 +11251,6 @@ table.bz-table thead{
   top: 7px;
 }
 
-.bz-pop-win textarea{
-  width: 100% !important;
-}
-.bz-pop-win input[type="text"],
-.bz-pop-win input[type="password"],
-.bz-pop-win input[type="number"]{
-  width: 100% !important;
-  height: 27px !important; 
-}
-
 .bz-en-highlight-ref-list{
   color:#999;
 }
@@ -11311,9 +11292,7 @@ table.bz-table thead{
   margin:7px;
 }
 
-.bz-pop-win .bz-tmp-chk{
-  margin:3px 7px;
-}
+
 .bz-modal-body .bz-try-parameter-list{
   height:calc(100% - 20px);
 }
@@ -11372,10 +11351,6 @@ table.bz-table thead{
   overflow:auto;
   font-family:'Roboto Mono', monospace !important;
   font-size:13px;
-}
-.bz-pop-win .bz-viewor-box{
-  height: calc(100% - 10px);
-  width: calc(100% - 2px);
 }
 
 .bz-viewor-name{
@@ -12876,9 +12851,10 @@ textarea{
 }
 .bz-extract-column-content{
   overflow: auto;
-  height: calc(100% - 80px);
+  height: calc(100% - 85px);
   position: absolute;
-  width: calc(33.33333% - 18px);
+  width: calc(33.33333% - 21px);
+  margin-top: -1px;
 }
 .bz-extract-column-title{
   height:30px;

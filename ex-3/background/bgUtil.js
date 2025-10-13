@@ -133,16 +133,11 @@ globalThis.bgUtil={
       })
     }
   },
+  focusWinById:function(t,v){
+    chrome.windows.update(v,{focused:true})
+  },
   focusTab:function(t,v){
     chrome.windows.update(t.tab.windowId,{focused:true})
-    // v=parseInt(v)
-    // _tabManagement._getTabById(v,function(o){
-    //   chrome.windows.update(o.windowId,{focused:true})
-    //   // chrome.windows.update(o.windowId,{state:"minimized"})
-    //   // setTimeout(()=>{
-    //   //   chrome.windows.update(o.windowId,{state:"normal"})
-    //   // })
-    // })
   },
   exeRuntimeCmd:function(t,k,ps,f){
     if(f){
@@ -186,10 +181,12 @@ globalThis.bgUtil={
             return
           }
         }
-        w=_tabManagement._map[w].windowId
-        chrome.windows[d[1]](w,d[2],()=>{
-          console.log("ok")
-        })
+        if(w){
+          w=_tabManagement._map[w].windowId
+          chrome.windows[d[1]](w,d[2],()=>{
+            console.log("ok")
+          })
+        }
       }
     }
   },

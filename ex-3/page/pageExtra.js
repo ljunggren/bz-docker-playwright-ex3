@@ -1519,7 +1519,6 @@ var $util={
       })
       return
     }else{
-debugger
       o=_Util._getElementByQuickPath(o)
 
     }
@@ -5199,7 +5198,7 @@ var _cssHandler={
     }
     for(var i=1;i<p.length;i++){
       var v=p[i]
-      if(v[0]!="{"){
+      if(v[0]!="{"&&_cssHandler._nameMap[v]){
         cp.push({_type:"element",_value:v,_css:_cssHandler._nameMap[v]._css});
       }else{
         v=v.substring(1,v.length-1)
@@ -9130,9 +9129,6 @@ class $$group extends $$action{
   static jsonToObject(d){
     let as=d.actions.map(a=>{
       let b=$$action.jsonToObject(a)
-      if(!b){
-        debugger
-      }
       return b
     }),
         c=d.conditionAction?$$action.jsonToObject(d.conditionAction):null
