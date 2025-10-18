@@ -773,7 +773,7 @@ window._Util={
           if(t[k]&&f[k]&&t[k].constructor==Object&&f[k].constructor==Object){
             _Util._assign(f[k],t[k])
           }else{
-            t[k]=f[k]
+            t[k]=_CtrlDriver._replaceData(t[k],f[k])
           }
         }else{
           t[k]=f[k]

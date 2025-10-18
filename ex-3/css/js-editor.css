@@ -61,7 +61,7 @@
   min-height: 15px;
   top:5px;
 }
-
+.bz-dlg-content .bz-js-editor div,
 .bz-console-input-box .bz-js-editor div,
 .bz-pop-win .bz-modal-body .bz-js-editor div{
   top:0 !important;

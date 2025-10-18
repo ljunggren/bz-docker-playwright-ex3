@@ -8712,7 +8712,7 @@ window._Util={
           if(t[k]&&f[k]&&t[k].constructor==Object&&f[k].constructor==Object){
             _Util._assign(f[k],t[k])
           }else{
-            t[k]=f[k]
+            t[k]=_CtrlDriver._replaceData(t[k],f[k])
           }
         }else{
           t[k]=f[k]
@@ -16800,14 +16800,6 @@ var _CtrlDriver={
       _toData[k]=_from[k]
     }
   },
-  _replaceData:function(_from,_toData){
-    _CtrlDriver._mergeData(_from,_toData);
-    for(var k in _toData){
-      if(_from[k]!=_toData[k]){
-        _toData[k]=undefined;
-      }
-    }
-  },
   _createBZArea:function(_doc){
     var o=$(_doc).find("#bz-tmp-area");
     if(!o.length){
@@ -18978,6 +18970,42 @@ var _CtrlDriver={
         }
       }
     }
+  },
+  _replaceData:function(_data,_newData){
+    if(!_newData||!_data||_data.constructor!=_newData.constructor){
+      _data=_newData
+    }else if(_newData.constructor==Array){
+      _newData.forEach((v,i)=>{
+        if(_data.length<=i){
+          _data.push(v)
+          return
+        }else{
+          _data[i]=_CtrlDriver._replaceData(_data[i],v)
+        }
+      })
+      while(_data.length>_newData.length){
+        _data.pop()
+      }
+    }else if(_newData.constructor==Object){
+      Object.keys(_data).forEach(k=>{
+        if(!_newData.hasOwnProperty(k)){
+          _data[k]=0
+          delete _data[k]
+        }
+      })
+      Object.keys(_newData).forEach(k=>{
+        if(!_data[k]||!_newData[k]||_data[k].constructor!=_newData[k].constructor){
+          _data[k]=_newData[k]
+        }else if([Object,Array].includes(_data[k].constructor)){
+          _CtrlDriver._replaceData(_data[k],_newData[k])
+        }else{
+          _data[k]=_newData[k]
+        }
+      })
+    }else{
+      _data=_newData
+    }
+    return _data
   }
 };
 _CtrlDriver._setupKeyInput();
@@ -24857,9 +24885,9 @@ var _optHistoryHandler={
         })){
           _optHistoryHandler._store()
         }
-        if(_IDE._data._curAction){
-          BZ._setHash(location.hash)
-        }
+        // if(_IDE._data._curAction){
+        //   BZ._setHash(location.hash)
+        // }
         BZ._data._uiSwitch._undoing=0
       })
     }else{
@@ -24895,9 +24923,9 @@ var _optHistoryHandler={
         }else{
           _optHistoryHandler._store()
         }
-        if(_IDE._data._curAction){
-          BZ._setHash(location.hash)
-        }
+        // if(_IDE._data._curAction){
+        //   BZ._setHash(location.hash)
+        // }
         BZ._data._uiSwitch._undoing=0
       })
     }else{
@@ -51127,7 +51155,7 @@ var _ideActionManagement={
     }
     return p;
   },
-  _setAdvancedOptions:function(_vPath,_uiFrom){
+  _setAdvancedOptions:function(_vPath,_uiFrom,_updateFun){
     let a=eval(_vPath)
     let _advOptions=[]
     if(_ideActionManagement._hasElement(a)||a.path){
@@ -51159,9 +51187,6 @@ var _ideActionManagement={
 
     _Util._confirmMessage({
       _tag:"div",
-      _update:function(){
-        _ideTestManagement._save(0,0,_Util._resizeModelWindow)
-      },
       _attr:{
         "class":"bz-h-h-tabs bz-std-tabs",
         style:"margin-top:10px;"
@@ -51207,7 +51232,8 @@ var _ideActionManagement={
           _tag:"div",
           _attr:{
             class:"bz-h-h-tab-content",
-            style:"padding: 10px;width: calc(100% - 22px);"
+            style:"padding: 10px;width: calc(100% - 22px);",
+            disabled:"!BZ._isCheckout()"
           },
           _items:[
             //Skip
@@ -51224,8 +51250,8 @@ var _ideActionManagement={
                       })
                     })
                   },_bzMessage._action._skipActionElement,0,0,0,0,0,0,function(){
-                  return !BZ._isCheckout(0,1)
-                })
+                    return !BZ._isCheckout(0,1)
+                  })
                 ]
               }
             },
@@ -51613,7 +51639,15 @@ var _ideActionManagement={
           ]
         }
       ]
-    },[],_bzMessage._common._advanced,600);
+    },[],_bzMessage._common._advanced,600,0,function(){
+      if(_updateFun){
+        _updateFun()
+      }else if(!_aiGeneratorDataHandler._isAIGenerateTest(_IDE._data._curTest)){
+        _ideTestManagement._save(0,0,_Util._resizeModelWindow)
+      }else{
+        _ideModuleManagement._save()
+      }
+    });
   },
   _hasOption:function(a){
     let e=a.event
