@@ -8659,9 +8659,6 @@ window.bzComm={
       delete rv.fromId;
       delete rv.fromIFrameId
       bzComm._postMessage(rv)
-      setTimeout(()=>{
-        bzComm._focusIDE()
-      },100)
     }
   },
   _handleResult:function(v){

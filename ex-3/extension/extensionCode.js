@@ -16246,9 +16246,6 @@ window.bzComm={
       delete rv.fromId;
       delete rv.fromIFrameId
       bzComm._postMessage(rv)
-      setTimeout(()=>{
-        bzComm._focusIDE()
-      },100)
     }
   },
   _handleResult:function(v){
@@ -31543,7 +31540,7 @@ var _domActionTask={
             $(x).blur()
             _fun(1)
           }else{
-            _exe(es)
+            _exe(_Util._getDiffAfterTriggerEvent(1,1))
           }
         })
       }else{
